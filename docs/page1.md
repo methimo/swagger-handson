@@ -1,4 +1,4 @@
-# 環境構築
+# ０.環境構築
 
 ## Docker のインストール
 
@@ -23,3 +23,11 @@
 ```sh
 C:¥Users¥user > docker-machine --debug create -d virtualbox default
 ```
+
+#### 動作確認
+
+```sh
+docker -v
+```
+
+Docker version ~~~ が表示されれば OK

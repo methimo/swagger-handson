@@ -1,8 +1,8 @@
-# Docker の基本的な動作
+# 2. Docker の基本コマンド
 
 - まずは適当なコンテナを起動させてみます
 
-## HelloWorld
+## コンテナイメージ取得〜起動
 
 ```
 docker search hello-world
@@ -33,9 +33,10 @@ docker ps
 
 ```console
 docker ps -a
-```
 
-![ps-a](/images/ps-a.png)
+> CONTAINER ID        IMAGE               COMMAND                  CREATED             STATUS                        PORTS                NAMES
+> 944a24018e5d        hello-world         "/hello"                 4 minutes ago       Exited (0) 4 minutes ago                           hello-world-machida
+```
 
 - hello-world-machida コンテナが Exited(0)で存在します
 - 処理が終わったので削除しましょう
@@ -45,8 +46,8 @@ docker rm hello-world-machida
 docker ps -a
 ```
 
-- 削除できない場合はコンテナ ID を指定してください
+- 削除できない場合はコンテナ ID を指定して削除してください
 
-## Topic2
+## コンテナイメージ
 
 ## Topic3
