@@ -151,11 +151,10 @@ docker images
 docker run --name hello-node-docker -p 9090:8080 -d node-docker
 docker ps
 # hello-node-docker コンテナが表示されればOK
-
 ```
 
 - 起動したコンテナ上で稼働するアプリケーションにブラウザからアクセスします
-  http://localhost:9090
+  [http://localhost:9090](http://localhost:9090)
 - HelloWorld が表示されれば OK
 
 ```sh
@@ -163,3 +162,22 @@ docker logs hello-node-docker
 # コンテナ内の標準出力ログを確認するコマンド
 # Container Access!!! が表示されればOK
 ```
+
+## コンテナのあれこれ
+
+- 起動したコンテナの中に入ってみましょう
+
+```sh
+node -v
+docker exec -it hello-node-docker /bin/bash
+
+~~コンテナの中~~
+ls -la
+node -v
+```
+
+- ホスト OS とコンテナ内の Node のバージョンが異なるのがわかります
+- Dockerfile で v12 の Node やライブラリをインストールするよう記載しました
+- アプリ実行環境を構築済みのイメージがあれば、イメージを元にコンテナを即座に起動できます
+- またコンテナ内の環境はホスト OS と独立しているため、ホスト OS の環境を気にせず起動ができます
+- そのため、アプリ開発でしばしば起こる「テスト環境と本番環境でモジュールのバージョンが違うので起動に失敗する」がありません
