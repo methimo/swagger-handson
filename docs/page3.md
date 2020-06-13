@@ -41,13 +41,125 @@ docker ps -a
 - hello-world-machida コンテナが Exited(0)で存在します
 - 処理が終わったので削除しましょう
 
-```
+```sh
 docker rm hello-world-machida
 docker ps -a
 ```
 
 - 削除できない場合はコンテナ ID を指定して削除してください
 
-## コンテナイメージ
+## コンテナイメージ作成
 
-## Topic3
+- 今までは完成しているコンテナイメージを取得していました
+- コンテナイメージを作成してみます
+
+```
+mkdir node-docker
+```
+
+- 適当なエディタで以下ファイル群を作成します
+- `node-docker/server.js`
+
+```jsx
+"use strict";
+const express = require("express");
+const dayjs = require("dayjs");
+const time = dayjs().format("YYYY-MM-DD HH:mm:ss");
+
+const PORT = 8080;
+const HOST = "0.0.0.0";
+
+// App
+const app = express();
+app.get("/", (req, res) => {
+  console.log(time + " Container Access!!! ");
+  res.send("Hello World");
+});
+
+app.listen(PORT, HOST);
+console.log(`Running on http://${HOST}:${PORT}`);
+```
+
+- `node-docker/package.json`
+
+```json
+{
+  "name": "docker_web_app",
+  "version": "1.0.0",
+  "description": "Node.js on Docker",
+  "author": "First Last <first.last@example.com>",
+  "main": "server.js",
+  "scripts": {
+    "start": "node server.js"
+  },
+  "dependencies": {
+    "express": "^4.16.1",
+    "dayjs": "^1.8.11"
+  }
+}
+```
+
+- `node-docker/Dockerfile`
+
+```dockerfile
+#Node.js v12がインストールされたベースイメージ
+FROM node:12
+
+#アプリケーションディレクトリを作成
+WORKDIR /usr/src/app
+
+#アプリケーションの依存関係をインストール
+COPY package*.json ./
+RUN npm install
+
+#アプリケーションのソースを配置
+#ホストOSのカレントディレクトリ配下をコンテナ内の作業ディレクトリにコピー
+COPY . .
+
+#コンテナがアクセスを許可するポート指定
+EXPOSE 8080
+
+#コンテナ起動時に実行するコマンドを指定
+CMD [ "node", "server.js" ]
+```
+
+- `node-docker/.dockerignore`
+
+```dockerfile
+node_modules
+npm-debug.log
+```
+
+- ファイル群を作成したらコンテナイメージをビルドします
+
+```sh
+cd node-docker
+
+ls -la
+#4ファイルがあることを確認
+
+docker build -t node-docker .
+# Successfully tagged machida/hello-node:latest が表示されればOK
+
+docker images
+# node-docker イメージが作成されていればOK
+```
+
+- コンテナイメージを作成したのでコンテナを起動します
+
+```sh
+docker run --name hello-node-docker -p 9090:8080 -d node-docker
+docker ps
+# hello-node-docker コンテナが表示されればOK
+
+```
+
+- 起動したコンテナ上で稼働するアプリケーションにブラウザからアクセスします
+  http://localhost:9090
+- HelloWorld が表示されれば OK
+
+```sh
+docker logs hello-node-docker
+# コンテナ内の標準出力ログを確認するコマンド
+# Container Access!!! が表示されればOK
+```
