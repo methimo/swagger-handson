@@ -30,6 +30,6 @@
    - ホスト OS のリソースを直接利用するため,オーバーヘッドが少ない
    - 代表的ソフトウェア：Docker(Docker Inc.)
 
-<img src="/images/hyper.png">
+![hyper](/images/hyper.png)
 
 ## Docker の利点
