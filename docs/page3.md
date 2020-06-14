@@ -64,7 +64,6 @@ mkdir node-docker
 "use strict";
 const express = require("express");
 const dayjs = require("dayjs");
-const time = dayjs().format("YYYY-MM-DD HH:mm:ss");
 
 const PORT = 8080;
 const HOST = "0.0.0.0";
@@ -72,7 +71,12 @@ const HOST = "0.0.0.0";
 // App
 const app = express();
 app.get("/", (req, res) => {
-  console.log(time + " Container Access!!! ");
+  const time = dayjs().format("YYYY-MM-DD HH:mm:ss");
+  const message =
+    time +
+    ` Container Access!!!
+`;
+  console.log(message);
   res.send("Hello World");
 });
 
@@ -138,17 +142,17 @@ cd node-docker
 ls -la
 #4ファイルがあることを確認
 
-docker build -t node-docker .
+docker build -t hello-node-docker .
 # Successfully tagged machida/hello-node:latest が表示されればOK
 
 docker images
-# node-docker イメージが作成されていればOK
+# hello-node-docker イメージが作成されていればOK
 ```
 
 - コンテナイメージを作成したのでコンテナを起動します
 
 ```sh
-docker run --name hello-node-docker -p 9090:8080 -d node-docker
+docker run --name hello-node-docker -p 9090:8080 -d hello-node-docker
 docker ps
 # hello-node-docker コンテナが表示されればOK
 ```
@@ -168,19 +172,13 @@ docker logs hello-node-docker
 
 ![docker1](/images/docker1.png)
 
-## まとめ
-
-- コンテナイメージを元にコンテナを作成して起動できた
-
-## コンテナのあれこれ
-
 - 起動したコンテナの中に入ってみましょう
 
 ```sh
 node -v
 docker exec -it hello-node-docker /bin/bash
 
-~~コンテナの中~~
+== コンテナの中 ==
 ls -la
 node -v
 ```
@@ -191,3 +189,7 @@ node -v
 - アプリ実行環境を構築済みのイメージがあれば、イメージを元にコンテナを即座に起動できます
 - またコンテナ内の環境はホスト OS と独立しているため、ホスト OS の環境を気にせず起動ができます
 - そのため、アプリ開発でしばしば起こる「テスト環境と本番環境でモジュールのバージョンが違うので起動に失敗する」がありません
+
+## まとめ
+
+-

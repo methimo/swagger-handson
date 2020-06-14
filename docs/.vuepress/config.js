@@ -1,7 +1,7 @@
 module.exports = {
   title: "Docker Handson",
   themeConfig: {
-    sidebar: ["/page1", "/page2", "/page3"],
+    sidebar: ["/page1", "/page2", "/page3", "/page4"],
   },
   markdown: {
     lineNumbers: true,
