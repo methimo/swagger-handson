@@ -1,8 +1,9 @@
-# ０. 環境構築
+# 0. 環境構築
 
 ## Docker のインストール
 
-- Docker 実行環境は PC の OS によって大きく異なります
+- Docker 実行環境は PC の OS によって異なります
+- また Windows10 Home の場合,DockerToolBox のセットアップに失敗する可能性があり、ここが山場かもしれません
 
 ### MacOS の場合
 
@@ -18,10 +19,10 @@
 
 - Docker ToolBox をインストールします
 - [https://qiita.com/zeffy1014/items/dda78f4ab0449989dfe1](https://qiita.com/zeffy1014/items/dda78f4ab0449989dfe1)
-- Docker Toolbox のインストール後、コマンドプロンプトや PowerShell でコマンドの実行が必要です
+- Docker Toolbox のインストール後、PowerShell でコマンドの実行が必要です
 
 ```sh
-C:¥Users¥user > docker-machine --debug create -d virtualbox default
+docker-machine --debug create -d virtualbox default
 ```
 
 #### 動作確認
