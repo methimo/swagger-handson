@@ -182,3 +182,7 @@ docker push localhost:5000/output-node-docker/output-node-docker:2.0
 - [http://localhost:5000/v2/<イメージ名>/tags/list](http://localhost:5000/v2/output-node-docker/output-node-docker/tags/list)
 
 ## まとめ
+
+- コンテナ内のファイル変更はコンテナを削除するとリセットされてしまう
+- ボリュームマウント機能を利用することでコンテナ内のファイルの永続化ができる
+- DockerRegistry を構築してイメージの管理ができる
