@@ -1,4 +1,4 @@
-## 4. おさらい課題
+# 4. おさらい課題
 
 - DockerRegistry のイメージ一覧を GUI で確認できる Web アプリが`docker-registry-frontend`という名前のコンテナイメージとして世の中に公開されています
 - そのコンテナイメージを利用してコンテナを起動し、[http://localhost:8086](http://localhost:8086)にアクセスすると画面が表示されるようにしてください

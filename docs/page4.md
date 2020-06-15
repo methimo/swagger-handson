@@ -153,17 +153,13 @@ ls -la log
 ## 3-2. DockerRegistry
 
 - イメージを Pull する時に公式の DockerHub からイメージ検索、取得していました
-- システム内でイメージを管理したい時に、DockerRegistry を用います
-- 今回は DockerRegistry を構築します
+- システム内でイメージを管理したい時に DockerRegistry を用います
+- DockerRegistry を構築してみましょう
 
 ```sh
 mkdir /Users/machida/Documents/registry
 
 docker run -d -p 5000:5000 -v /Users/machida/Documents/registry:/var/lib/registry --name registry registry:2.3.0
-
-docker ps
-# registryが構築されていればOK
-
 ```
 
 - オプションの説明
@@ -173,11 +169,10 @@ docker ps
   - -v: ホスト OS `/User ~`とコンテナ内 `/var/lib/registry`をマウント
   - --name: コンテナ名を指定
 
-- DockerRegistry のリポジトリ一覧にアクセス
-- [http://localhost:5000/v2/\_catalog](http://localhost:5000/v2/_catalog)
-- `{"repositories":[]}`が表示されれは構築は OK
+- [http://localhost:5000/v2/\_catalog](http://localhost:5000/v2/_catalog)にアクセス
+- DockerRegistry のリポジトリ一覧を表示。`{"repositories":[]}`が表示されれば OK
 
-- DockerRegistry にイメージを Push します
+- 続いて DockerRegistry にイメージを Push します
 
 ```sh
 docker tag output-node-docker:latest localhost:5000/output-node-docker/output-node-docker:2.0
