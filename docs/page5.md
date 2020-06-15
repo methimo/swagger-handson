@@ -22,9 +22,8 @@
   - コンテナ名を docker-registry-frontend とする
   - コンテナ内に以下の環境変数を渡す - ENV_DOCKER_REGISTRY_HOST=`xxxx` - ENV_DOCKER_REGISTRY_PORT=`xxxx`
 
-  :::tips
-
-  - 環境変数を渡すオプションは -e です
-  - ENV_DOCKER_REGISTRY_HOST は DockerRegistry が稼働する IP アドレスを指定してください
-  - 稼働している IP アドレスはコンテナの詳細情報から確認できます
-    :::
+:::tips
+環境変数を渡すオプションは -e です
+ENV_DOCKER_REGISTRY_HOST は DockerRegistry が稼働する IP アドレスを指定してください
+稼働している IP アドレスはコンテナの詳細情報から確認できます
+:::
