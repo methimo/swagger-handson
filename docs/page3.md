@@ -10,35 +10,34 @@ docker pull hello-world
 docker images | grep hello-world
 ```
 
-- hello-world という名前のコンテナイメージを公式の DockerHub から取得しました
-- 現在自分のリポジトリに hello-world というコンテナイメージがあります
-- hello-world コンテナイメージからコンテナを起動しましょう
+- hello-world というイメージを DockerHub から取得しました
+- 現在自分のリポジトリに hello-world イメージがあります
+- イメージからコンテナを起動しましょう
 
 ```
 docker run --name hello-world-machida hello-world
 ```
 
-- hello-world コンテナイメージから hello-world-machida という名前のコンテナを作成して起動しました
+- hello-world イメージから hello-world-machida という名前のコンテナを作成して起動しました
 - `Hello from Docker! ~略~` が表示されれば OK です
 - このコンテナはメッセージを表示するだけのものです
-- 起動中のコンテナを調べてみます
+- 起動中のコンテナ一覧を取得します
 
-```console
+```sh
 docker ps
 ```
 
 - 何も存在しません
 - コンテナは処理を全て実行すると終了する特徴があります
-- -a オプションをつけると終了したコンテナも含めて表示されます
+- docker ps -a オプションをつけると終了したコンテナも含めて表示されます
 
-```console
+```sh
 docker ps -a
 
 > CONTAINER ID        IMAGE               COMMAND                  CREATED             STATUS                        PORTS                NAMES
 > 944a24018e5d        hello-world         "/hello"                 4 minutes ago       Exited (0) 4 minutes ago                           hello-world-machida
 ```
 
-- hello-world-machida コンテナが Exited(0)で存在します
 - 処理が終わったので削除しましょう
 
 ```sh
@@ -50,15 +49,19 @@ docker ps -a
 
 ## 2-2. コンテナイメージ作成
 
-- 今までは完成しているコンテナイメージを取得していました
-- コンテナイメージを作成してみます
+- 2-1 では完成しているイメージを取得しました
+- 今度はイメージを作成してみます
+- まずはホスト OS 側で作業用ディレクトリを作成します
 
 ```
 mkdir node-docker
 ```
 
-- 適当なエディタで以下ファイル群を作成します
-- `node-docker/server.js`
+- ディレクトリの配下に以下 4 ファイルを作成します
+- 好きなエディタを開いて編集してください
+
+1. `node-docker/server.js`
+   - アプリケーションロジックファイル
 
 ```jsx
 "use strict";
@@ -81,10 +84,10 @@ app.get("/", (req, res) => {
 });
 
 app.listen(PORT, HOST);
-console.log(`Running on http://${HOST}:${PORT}`);
 ```
 
-- `node-docker/package.json`
+2. `node-docker/package.json`
+   - js のライブラリ依存関係を記載したファイル
 
 ```json
 {
@@ -103,7 +106,8 @@ console.log(`Running on http://${HOST}:${PORT}`);
 }
 ```
 
-- `node-docker/Dockerfile`
+3. `node-docker/Dockerfile`
+   - イメージの元となるファイル。ベースとなるイメージにディレクトリ作成や資源配置をして、アプリケーション実行環境を構築します
 
 ```dockerfile
 #Node.js v12がインストールされたベースイメージ
@@ -127,14 +131,15 @@ EXPOSE 8080
 CMD [ "node", "server.js" ]
 ```
 
-- `node-docker/.dockerignore`
+4. `node-docker/.dockerignore`
+   - build 時に資源のコピー対象から除外するリストファイル
 
 ```dockerfile
 node_modules
 npm-debug.log
 ```
 
-- ファイル群を作成したらコンテナイメージをビルドします
+- イメージをビルドします
 
 ```sh
 cd node-docker
@@ -143,13 +148,13 @@ ls -la
 #4ファイルがあることを確認
 
 docker build -t hello-node-docker .
-# Successfully tagged machida/hello-node:latest が表示されればOK
+# Successfully tagged hello-node-docker:latest が表示されればOK
 
 docker images
 # hello-node-docker イメージが作成されていればOK
 ```
 
-- コンテナイメージを作成したのでコンテナを起動します
+- 作成したイメージからコンテナを起動します
 
 ```sh
 docker run --name hello-node-docker -p 9090:8080 -d hello-node-docker
@@ -157,7 +162,9 @@ docker ps
 # hello-node-docker コンテナが表示されればOK
 ```
 
-- 起動したコンテナ上で稼働するアプリケーションにブラウザからアクセスします
+- docker run を単に実行すると、アプリ起動後コンテナは終了してしまいます
+- アプリ起動後もコンテナを動かすためにバックグラウンド(-d オプション)で起動します
+- コンテナ上で稼働するアプリにブラウザからアクセスします
   [http://localhost:9090](http://localhost:9090)
 - HelloWorld が表示されれば OK
 
@@ -167,10 +174,10 @@ docker logs hello-node-docker
 # Container Access!!! が表示されればOK
 ```
 
-- ホスト OS の 9090 ポートとコンテナ OS の 8080 ポートにポートフォワーディングしている
-- コンテナ内で 8080 ポートでアプリを起動しているため、ユーザからはホスト OS の 9090 ポートでアクセスできる
-
 ![docker1](/images/docker1.png)
+
+- ホスト OS の 9090 ポートとコンテナの 8080 ポートをバインド
+- アプリはコンテナ内で 8080 ポートで起動しているため、ユーザからはホスト OS の 9090 ポートでアクセスできる
 
 - 起動したコンテナの中に入ってみましょう
 
