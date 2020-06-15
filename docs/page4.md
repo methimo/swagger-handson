@@ -122,7 +122,7 @@ docker run --name output-node-docker -v <ファイル永続化用ディレクト
 docker ps
 ```
 
-- ブラウザから以下にアクセスして output.txt にログを出力させます
+- アプリにアクセスして output.txt にログを出力させます
   [http://localhost:9091](http://localhost:9091)
 
 - ホスト OS 側から確認します
@@ -149,3 +149,45 @@ ls -la log
 
 - ログファイルが残っています
 - ブラウザからアプリにアクセスすると、先ほどのファイルの続きとして追記できます
+
+## 3-2. DockerRegistry
+
+- イメージを Pull する時に公式の DockerHub からイメージ検索、取得していました
+- システム内でイメージを管理したい時に、DockerRegistry を用います
+- 今回は DockerRegistry を構築します
+
+```sh
+mkdir /Users/machida/Documents/registry
+
+docker run -d -p 5000:5000 -v /Users/machida/Documents/registry:/var/lib/registry --name registry registry:2.3.0
+
+docker ps
+# registryが構築されていればOK
+
+```
+
+- オプションの説明
+
+  - -d: バックグラウンドで起動
+  - -p: ホスト OS 5000 番ポートとコンテナ内 5000 番ポートをバインド
+  - -v: ホスト OS `/User ~`とコンテナ内 `/var/lib/registry`をマウント
+  - --name: コンテナ名を指定
+
+- DockerRegistry のリポジトリ一覧にアクセス
+- [http://localhost:5000/v2/\_catalog](http://localhost:5000/v2/_catalog)
+- `{"repositories":[]}`が表示されれは構築は OK
+
+- DockerRegistry にイメージを Push します
+
+```sh
+docker tag output-node-docker:latest localhost:5000/output-node-docker/output-node-docker:2.0
+docker images
+docker push localhost:5000/output-node-docker/output-node-docker:2.0
+```
+
+- 再度リポジトリ一覧にアクセス
+- `{"repositories":["output-node-docker/output-node-docker"]}`が表示されれば OK
+- イメージのタグ一覧も取得できる
+- [http://localhost:5000/v2/<イメージ名>/tags/list](http://localhost:5000/v2/output-node-docker/output-node-docker/tags/list)
+
+## まとめ
