@@ -58,6 +58,7 @@ tail -f output.txt
 - 今度はホスト OS の 9091 ポートとコンテナ内 8080 ポートをバインドしました
 - ブラウザから以下にアクセスすると、output.txt にログが追記されます
   [http://localhost:9091](http://localhost:9091)
+
 - ここで現在起動しているコンテナを削除し、再度同名のコンテナを立ち上げます
 
 ```sh
@@ -103,14 +104,14 @@ RUN mkdir /usr/src/app/log
 ```jsx {4}
 //変更部分のみ記載
 
-//ファイル出力
+//ファイル出力先を変更
 fs.appendFileSync("log/output.txt", message, (err) => {
   if (err) throw err;
   console.log("ファイルが正常に出力されました。");
 });
 ```
 
-- 資源を修正したのでイメージをビルドしなおします
+- 資源を修正したのでイメージをビルドし直します
 
 ```sh
 cd <資源が格納されているディレクトリ>
@@ -136,7 +137,7 @@ ls -la
 ```sh
 docker stop output-node-docker
 docker rm output-node-docker
-docker run --name output-node-docker -v mkdir /Users/machida/Documents/docker-mnt:/usr/src/app/log -p 9091:8080 -d output-node-docker
+docker run --name output-node-docker -v /Users/machida/Documents/docker-mnt:/usr/src/app/log -p 9091:8080 -d output-node-docker
 docker exec -it output-node-docker /bin/bash
 
 ~コンテナの中~
