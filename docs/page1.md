@@ -21,13 +21,18 @@
 - [https://qiita.com/zeffy1014/items/dda78f4ab0449989dfe1](https://qiita.com/zeffy1014/items/dda78f4ab0449989dfe1)
 - Docker Toolbox のインストール後、デスクトップに表示されるスタートアップを実行すれば完了です
 
-- エラーが出る場合、PowerShell でコマンドの実行してください
+- エラーが出る場合、PowerShell で以下を実行してください
+- その後 VirtualBox を起動し、default マシンを起動すると Docker がインストールされたマシンを起動できます
 
 ```sh
 docker-machine --debug create -d virtualbox default
 ```
 
-- その後 VirtualBox を起動し、default マシンを起動すると Docker がインストールされたマシンを起動できます
+- マシン上でホスト OS のディレクトリに移動するには以下を実行します
+
+```sh
+cd /c/
+```
 
 #### 動作確認
 
