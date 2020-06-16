@@ -1,8 +1,11 @@
 # 2. Docker の基本コマンド
 
-- まずは適当なコンテナを起動させてみます
+- 以降の手順は Docker が起動しているマシン上で実行します。
 
-## 2-1. コンテナイメージ取得〜起動
+  - Mac の場合：PC のターミナルから実行
+  - Windows の場合：VirtualBox の default マシンから実行
+
+- まずは適当なコンテナを起動させてみます
 
 ```
 docker search hello-world
@@ -10,7 +13,7 @@ docker pull hello-world
 docker images | grep hello-world
 ```
 
-- hello-world というイメージを DockerHub から取得しました
+- hello-world という名前のイメージを DockerHub から検索し、取得しました
 - 現在自分のリポジトリに hello-world イメージがあります
 - イメージからコンテナを起動しましょう
 
