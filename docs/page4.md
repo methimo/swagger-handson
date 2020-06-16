@@ -25,7 +25,7 @@ app.get("/", (req, res) => {
   console.log(message);
 
   //ファイル出力
-  fs.appendFileSync("log/output.txt", message, (err) => {
+  fs.appendFileSync("output.txt", message, (err) => {
     if (err) throw err;
     console.log("ファイルが正常に出力されました。");
   });
