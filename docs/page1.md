@@ -1,43 +1,65 @@
-# 0. 環境構築
+# 1. Docker について
 
-## Docker のインストール
+## 1-1. 仮想化技術
 
-- Docker 実行環境は PC の OS によって異なります
-- また Windows10 Home の場合,DockerToolBox のセットアップに失敗する可能性があり、ここが山場かもしれません
+- 1 台の物理サーバを複数の仮想サーバに分割して利用する仕組み
+- それぞれの仮想サーバーで個別に OS やアプリケーションを実行でき、独立したサーバ環境として利用できる。
 
-### MacOS の場合
+### 仮想化の手法
 
-- Docker Desktop for Mac をインストールします
-- [https://qiita.com/ama_keshi/items/b4c47a4aca5d48f2661c](https://qiita.com/ama_keshi/items/b4c47a4aca5d48f2661c)
+- ホスト OS：物理サーバ上にインストールした OS
+- ゲスト OS：仮想化ソフトウェア上で起動する OS
 
-### Windows10 Pro の場合
+1. ホスト型
 
-- Docker Desktop for Windows をインストールします
-- [https://qiita.com/fkooo/items/d2fddef9091b906675ca](https://qiita.com/fkooo/items/d2fddef9091b906675ca)
+   - ホスト OS 上にインストールした仮想化ソフトウェアから仮想のハードウェア環境をエミュレートすることで仮想サーバを実現
+   - ハードウェアにアクセスする必要があるためオーバヘッドが大きい
+   - 代表的な製品：VirtualBox(Oracle)
 
-### Windows10 Home, Windows7 の場合
+     <img src="/images/host.png" width="50%">
 
-- Docker ToolBox をインストールします
-- [https://qiita.com/zeffy1014/items/dda78f4ab0449989dfe1](https://qiita.com/zeffy1014/items/dda78f4ab0449989dfe1)
-- Docker Toolbox のインストール後、デスクトップに表示されるスタートアップを実行すれば完了です
+1. ハイパーバイザ型
 
-- エラーが出る場合、PowerShell で以下を実行してください
-- その後 VirtualBox を起動し、default マシンを起動すると Docker がインストールされたマシンを起動できます
+   - ハードウェアに直接インストールされている仮想化ソフトウェア(ハイパーバイザ)を利用し、直接ハードウェアを制御することで仮想化を実現する
+   - ホスト OS が不要。
+   - 代表的な製品：XenServer(Citrix), Hyper-V(Microsoft)
 
-```sh
-docker-machine --debug create -d virtualbox default
-```
+     <img src="/images/hypervisor.png" width="50%">
 
-- マシン上でホスト OS のディレクトリに移動するには以下を実行します
+1. コンテナ型
 
-```sh
-cd /c/
-```
+   - ホスト OS 上に論理的な区画(コンテナ)を作り、それぞれで独立したアプリケーション実行環境を稼働させる
+   - ホスト OS からは各コンテナは 1 つのプロセスとして稼働し、OS カーネルやリソース(CPU,メモリ)を複数コンテナで共有する
+   - ホスト OS のリソースを直接利用するため,オーバーヘッドが少ない
+   - 代表的ソフトウェア：Docker(Docker Inc.)
 
-#### 動作確認
+     <img src="/images/container.png" width="50%">
 
-```sh
-docker -v
-```
+## 1-2. Docker のアーキテクチャ
 
-Docker version ~~~ が表示されれば OK
+![abst](/images/abst.png)
+
+- Docker デーモン
+  - Docker コマンドの実行者
+- Docker クライアント
+  - ユーザが入力するインタフェース。コマンドラインや GUI がある
+- Docker コンテナ
+  - アプリを実行する空間。コンテナの中にアプリソースをはじめアプリ実行に必要な資源を格納する
+- Docker イメージ
+  - コンテナの元となるテンプレート。イメージからコンテナを作成する
+- Dockerfile
+  - イメージを作成するための命令を記載したファイル。
+- Docker レジストリ
+  - イメージの保管庫。インターネット上に公開されているもの(DockerHub)と、プライベートに構築可能なもの(DockerRegistry)がある
+
+## 1-3. Docker のメリットデメリット
+
+- メリット
+  - OS 起動がないため起動が早い
+  - コンテナ内で独立した環境を保持できるため本番/テスト環境の差分が発生しない(可搬性)
+  - イメージがあるため環境を破壊してもすぐ復元できる(再現性)
+  - カーネルのメモリが節約できアプリの集約密度をあげることができる
+- デメリット
+  - コンテナ削除時にコンテナ内のファイルシステムに書いたファイルが消える(揮発性)
+  - 複数コンテナ起動時のリソース管理が大変
+  - コンテナを停止せずに他ホスト OS に移動できない

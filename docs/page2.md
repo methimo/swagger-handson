@@ -1,65 +1,217 @@
-# 1. Docker について
+# 2. Docker の基本コマンド
 
-## 1-1. 仮想化技術
+- 以降の手順は Docker が起動しているマシン上で実行します。
 
-- 1 台の物理サーバを複数の仮想サーバに分割して利用する仕組み
-- それぞれの仮想サーバーで個別に OS やアプリケーションを実行でき、独立したサーバ環境として利用できる。
+  - Mac の場合：PC のターミナルから実行
+  - Windows の場合：VirtualBox の default マシンから実行
 
-### 仮想化の手法
+- まずは適当なコンテナを起動させてみます
 
-- ホスト OS：物理サーバ上にインストールした OS
-- ゲスト OS：仮想化ソフトウェア上で起動する OS
+```
+docker search hello-world
+docker pull hello-world
+docker images | grep hello-world
+```
 
-1. ホスト型
+- hello-world という名前のイメージを DockerHub から検索し、取得しました
+- 現在自分のリポジトリに hello-world イメージがあります
+- イメージからコンテナを起動しましょう
 
-   - ホスト OS 上にインストールした仮想化ソフトウェアから仮想のハードウェア環境をエミュレートすることで仮想サーバを実現
-   - ハードウェアにアクセスする必要があるためオーバヘッドが大きい
-   - 代表的な製品：VirtualBox(Oracle)
+```
+docker run --name hello-world-machida hello-world
+```
 
-     <img src="/images/host.png" width="50%">
+- hello-world イメージから hello-world-machida という名前のコンテナを作成して起動しました
+- `Hello from Docker! ~略~` が表示されれば OK です
+- このコンテナはメッセージを表示するだけのものです
+- 起動中のコンテナ一覧を取得します
 
-1. ハイパーバイザ型
+```sh
+docker ps
+```
 
-   - ハードウェアに直接インストールされている仮想化ソフトウェア(ハイパーバイザ)を利用し、直接ハードウェアを制御することで仮想化を実現する
-   - ホスト OS が不要。
-   - 代表的な製品：XenServer(Citrix), Hyper-V(Microsoft)
+- 何も存在しません
+- コンテナは処理を全て実行すると終了する特徴があります
+- docker ps -a オプションをつけると終了したコンテナも含めて表示されます
 
-     <img src="/images/hypervisor.png" width="50%">
+```sh
+docker ps -a
 
-1. コンテナ型
+> CONTAINER ID        IMAGE               COMMAND                  CREATED             STATUS                        PORTS                NAMES
+> 944a24018e5d        hello-world         "/hello"                 4 minutes ago       Exited (0) 4 minutes ago                           hello-world-machida
+```
 
-   - ホスト OS 上に論理的な区画(コンテナ)を作り、それぞれで独立したアプリケーション実行環境を稼働させる
-   - ホスト OS からは各コンテナは 1 つのプロセスとして稼働し、OS カーネルやリソース(CPU,メモリ)を複数コンテナで共有する
-   - ホスト OS のリソースを直接利用するため,オーバーヘッドが少ない
-   - 代表的ソフトウェア：Docker(Docker Inc.)
+- 処理が終わったので削除しましょう
 
-     <img src="/images/container.png" width="50%">
+```sh
+docker rm hello-world-machida
+docker ps -a
+```
 
-## 1-2. Docker のアーキテクチャ
+- 削除できない場合はコンテナ ID を指定して削除してください
 
-![abst](/images/abst.png)
+## 2-2. コンテナイメージ作成
 
-- Docker デーモン
-  - Docker コマンドの実行者
-- Docker クライアント
-  - ユーザが入力するインタフェース。コマンドラインや GUI がある
-- Docker コンテナ
-  - アプリを実行する空間。コンテナの中にアプリソースをはじめアプリ実行に必要な資源を格納する
-- Docker イメージ
-  - コンテナの元となるテンプレート。イメージからコンテナを作成する
-- Dockerfile
-  - イメージを作成するための命令を記載したファイル。
-- Docker レジストリ
-  - イメージの保管庫。インターネット上に公開されているもの(DockerHub)と、プライベートに構築可能なもの(DockerRegistry)がある
+- 2-1 では完成しているイメージを取得しました
+- 今度はイメージを作成してみます
+- まずはホスト OS 側で作業用ディレクトリを作成します
 
-## 1-3. Docker のメリットデメリット
+```
+mkdir node-docker
+```
 
-- メリット
-  - OS 起動がないため起動が早い
-  - コンテナ内で独立した環境を保持できるため本番/テスト環境の差分が発生しない(可搬性)
-  - イメージがあるため環境を破壊してもすぐ復元できる(再現性)
-  - カーネルのメモリが節約できアプリの集約密度をあげることができる
-- デメリット
-  - コンテナ削除時にコンテナ内のファイルシステムに書いたファイルが消える(揮発性)
-  - 複数コンテナ起動時のリソース管理が大変
-  - コンテナを停止せずに他ホスト OS に移動できない
+- ディレクトリの配下に以下 4 ファイルを作成します
+- 好きなエディタを開いて編集してください
+
+1. `node-docker/server.js`
+   - アプリケーションロジックファイル
+
+```jsx
+"use strict";
+const express = require("express");
+const dayjs = require("dayjs");
+
+const PORT = 8080;
+const HOST = "0.0.0.0";
+
+// App
+const app = express();
+app.get("/", (req, res) => {
+  const time = dayjs().format("YYYY-MM-DD HH:mm:ss");
+  const message =
+    time +
+    ` Container Access!!!
+`;
+  console.log(message);
+  res.send("Hello World");
+});
+
+app.listen(PORT, HOST);
+```
+
+2. `node-docker/package.json`
+   - js のライブラリ依存関係を記載したファイル
+
+```json
+{
+  "name": "docker_web_app",
+  "version": "1.0.0",
+  "description": "Node.js on Docker",
+  "author": "First Last <first.last@example.com>",
+  "main": "server.js",
+  "scripts": {
+    "start": "node server.js"
+  },
+  "dependencies": {
+    "express": "^4.16.1",
+    "dayjs": "^1.8.11"
+  }
+}
+```
+
+3. `node-docker/Dockerfile`
+   - イメージの元となるファイル。ベースとなるイメージにディレクトリ作成や資源配置をして、アプリケーション実行環境を構築します
+
+```dockerfile
+#Node.js v12がインストールされたベースイメージ
+FROM node:12
+
+#アプリケーションディレクトリを作成
+WORKDIR /usr/src/app
+
+#アプリケーションの依存関係をインストール
+COPY package*.json ./
+RUN npm install
+
+#アプリケーションのソースを配置
+#ホストOSのカレントディレクトリ配下をコンテナ内の作業ディレクトリにコピー
+COPY . .
+
+#コンテナがアクセスを許可するポート指定
+EXPOSE 8080
+
+#コンテナ起動時に実行するコマンドを指定
+CMD [ "node", "server.js" ]
+```
+
+4. `node-docker/.dockerignore`
+   - build 時に資源のコピー対象から除外するリストファイル
+
+```dockerfile
+node_modules
+npm-debug.log
+```
+
+- イメージをビルドします
+
+```sh
+cd node-docker
+
+ls -la
+#4ファイルがあることを確認
+
+docker build -t hello-node-docker .
+# Successfully tagged hello-node-docker:latest が表示されればOK
+
+docker images
+# hello-node-docker イメージが作成されていればOK
+```
+
+- 作成したイメージからコンテナを起動します
+
+```sh
+docker run --name hello-node-docker -p 9090:8080 -d hello-node-docker
+docker ps
+# hello-node-docker コンテナが表示されればOK
+```
+
+- docker run を単に実行すると、アプリ起動後コンテナは終了してしまいます
+- アプリ起動後もコンテナを動かすためにバックグラウンド(-d オプション)で起動します
+- コンテナ上で稼働するアプリにブラウザからアクセスします
+  [http://localhost:9090](http://localhost:9090)
+- HelloWorld が表示されれば OK
+
+:::tip
+
+- DockerToolBox を利用している場合、VirtualBox が建てたマシンの IP になります
+  [http://192.168.99.100:9090](http://192.168.99.100:9090)
+- 出典：[https://qiita.com/amuyikam/items/ef3f8e8e25c557f68f6a](https://qiita.com/amuyikam/items/ef3f8e8e25c557f68f6a)
+  :::
+
+```sh
+docker logs hello-node-docker
+# コンテナ内の標準出力ログを確認するコマンド
+# Container Access!!! が表示されればOK
+```
+
+![docker1](/images/docker1.png)
+
+- ホスト OS の 9090 ポートとコンテナの 8080 ポートをバインド
+- アプリはコンテナ内で 8080 ポートで起動しているため、ユーザからはホスト OS の 9090 ポートでアクセスできる
+
+- 起動したコンテナの中に入ってみましょう
+
+```sh
+node -v
+docker exec -it hello-node-docker /bin/bash
+
+== コンテナの中 ==
+ls -la
+node -v
+```
+
+- ホスト OS とコンテナ内の Node のバージョンが異なるのがわかります
+- Dockerfile で Node やライブラリをインストールするよう記載しました
+- このようにアプリ実行環境の構築をコード化することで、環境構築がいつでも再現できます
+- アプリ実行環境を構築済みのイメージがあれば、イメージを元にコンテナを即座に起動できます
+- またコンテナ内の環境はホスト OS と独立しているため、ホスト OS の環境を気にせず起動ができます
+- そのため、アプリ開発でしばしば起こる「テスト環境と本番環境でモジュールのバージョンが違うので起動に失敗する」がありません
+
+:::tip
+docker inspect <コンテナ名>コマンドでコンテナの詳細情報を確認できます
+:::
+
+## まとめ
+
+- Dockerfile からイメージを作成、コンテナを起動できた
+- アプリ実行環境構築のコード化、ホスト OS との独立により、再現性・可搬性が高い

@@ -1,75 +1,15 @@
-# 2. Docker の基本コマンド
+# 3. Docker あれこれ
 
-- 以降の手順は Docker が起動しているマシン上で実行します。
+## 3-1. 揮発性とファイル永続化
 
-  - Mac の場合：PC のターミナルから実行
-  - Windows の場合：VirtualBox の default マシンから実行
+- コンテナで稼働するアプリがログを出力する時を考えます
+- `node-docker/server.js` を修正します
 
-- まずは適当なコンテナを起動させてみます
-
-```
-docker search hello-world
-docker pull hello-world
-docker images | grep hello-world
-```
-
-- hello-world という名前のイメージを DockerHub から検索し、取得しました
-- 現在自分のリポジトリに hello-world イメージがあります
-- イメージからコンテナを起動しましょう
-
-```
-docker run --name hello-world-machida hello-world
-```
-
-- hello-world イメージから hello-world-machida という名前のコンテナを作成して起動しました
-- `Hello from Docker! ~略~` が表示されれば OK です
-- このコンテナはメッセージを表示するだけのものです
-- 起動中のコンテナ一覧を取得します
-
-```sh
-docker ps
-```
-
-- 何も存在しません
-- コンテナは処理を全て実行すると終了する特徴があります
-- docker ps -a オプションをつけると終了したコンテナも含めて表示されます
-
-```sh
-docker ps -a
-
-> CONTAINER ID        IMAGE               COMMAND                  CREATED             STATUS                        PORTS                NAMES
-> 944a24018e5d        hello-world         "/hello"                 4 minutes ago       Exited (0) 4 minutes ago                           hello-world-machida
-```
-
-- 処理が終わったので削除しましょう
-
-```sh
-docker rm hello-world-machida
-docker ps -a
-```
-
-- 削除できない場合はコンテナ ID を指定して削除してください
-
-## 2-2. コンテナイメージ作成
-
-- 2-1 では完成しているイメージを取得しました
-- 今度はイメージを作成してみます
-- まずはホスト OS 側で作業用ディレクトリを作成します
-
-```
-mkdir node-docker
-```
-
-- ディレクトリの配下に以下 4 ファイルを作成します
-- 好きなエディタを開いて編集してください
-
-1. `node-docker/server.js`
-   - アプリケーションロジックファイル
-
-```jsx
+```jsx{4,19-23}
 "use strict";
 const express = require("express");
 const dayjs = require("dayjs");
+const fs = require("fs");
 
 const PORT = 8080;
 const HOST = "0.0.0.0";
@@ -83,135 +23,167 @@ app.get("/", (req, res) => {
     ` Container Access!!!
 `;
   console.log(message);
+
+  //ファイル出力
+  fs.appendFileSync("output.txt", message, (err) => {
+    if (err) throw err;
+    console.log("ファイルが正常に出力されました。");
+  });
+
   res.send("Hello World");
 });
 
 app.listen(PORT, HOST);
+console.log(`Running on http://${HOST}:${PORT}`);
 ```
 
-2. `node-docker/package.json`
-   - js のライブラリ依存関係を記載したファイル
-
-```json
-{
-  "name": "docker_web_app",
-  "version": "1.0.0",
-  "description": "Node.js on Docker",
-  "author": "First Last <first.last@example.com>",
-  "main": "server.js",
-  "scripts": {
-    "start": "node server.js"
-  },
-  "dependencies": {
-    "express": "^4.16.1",
-    "dayjs": "^1.8.11"
-  }
-}
-```
-
-3. `node-docker/Dockerfile`
-   - イメージの元となるファイル。ベースとなるイメージにディレクトリ作成や資源配置をして、アプリケーション実行環境を構築します
-
-```dockerfile
-#Node.js v12がインストールされたベースイメージ
-FROM node:12
-
-#アプリケーションディレクトリを作成
-WORKDIR /usr/src/app
-
-#アプリケーションの依存関係をインストール
-COPY package*.json ./
-RUN npm install
-
-#アプリケーションのソースを配置
-#ホストOSのカレントディレクトリ配下をコンテナ内の作業ディレクトリにコピー
-COPY . .
-
-#コンテナがアクセスを許可するポート指定
-EXPOSE 8080
-
-#コンテナ起動時に実行するコマンドを指定
-CMD [ "node", "server.js" ]
-```
-
-4. `node-docker/.dockerignore`
-   - build 時に資源のコピー対象から除外するリストファイル
-
-```dockerfile
-node_modules
-npm-debug.log
-```
-
-- イメージをビルドします
+- 新しく output-node-docker というコンテナイメージを作成してコンテナを起動します
 
 ```sh
-cd node-docker
-
-ls -la
-#4ファイルがあることを確認
-
-docker build -t hello-node-docker .
-# Successfully tagged hello-node-docker:latest が表示されればOK
-
+docker build -t output-node-docker .
 docker images
-# hello-node-docker イメージが作成されていればOK
-```
-
-- 作成したイメージからコンテナを起動します
-
-```sh
-docker run --name hello-node-docker -p 9090:8080 -d hello-node-docker
+docker run --name output-node-docker -p 9091:8080 -d output-node-docker
 docker ps
-# hello-node-docker コンテナが表示されればOK
-```
-
-- docker run を単に実行すると、アプリ起動後コンテナは終了してしまいます
-- アプリ起動後もコンテナを動かすためにバックグラウンド(-d オプション)で起動します
-- コンテナ上で稼働するアプリにブラウザからアクセスします
-  [http://localhost:9090](http://localhost:9090)
-- HelloWorld が表示されれば OK
-
-:::tip
-
-- DockerToolBox を利用している場合、VirtualBox が建てたマシンの IP になります
-  [http://192.168.99.100:9090](http://192.168.99.100:9090)
-- 出典：[https://qiita.com/amuyikam/items/ef3f8e8e25c557f68f6a](https://qiita.com/amuyikam/items/ef3f8e8e25c557f68f6a)
-  :::
-
-```sh
-docker logs hello-node-docker
-# コンテナ内の標準出力ログを確認するコマンド
-# Container Access!!! が表示されればOK
-```
-
-![docker1](/images/docker1.png)
-
-- ホスト OS の 9090 ポートとコンテナの 8080 ポートをバインド
-- アプリはコンテナ内で 8080 ポートで起動しているため、ユーザからはホスト OS の 9090 ポートでアクセスできる
-
-- 起動したコンテナの中に入ってみましょう
-
-```sh
-node -v
-docker exec -it hello-node-docker /bin/bash
+docker exec -it output-node-docker /bin/bash
 
 == コンテナの中 ==
 ls -la
-node -v
+tail -f output.txt
 ```
 
-- ホスト OS とコンテナ内の Node のバージョンが異なるのがわかります
-- Dockerfile で Node やライブラリをインストールするよう記載しました
-- このようにアプリ実行環境の構築をコード化することで、環境構築がいつでも再現できます
-- アプリ実行環境を構築済みのイメージがあれば、イメージを元にコンテナを即座に起動できます
-- またコンテナ内の環境はホスト OS と独立しているため、ホスト OS の環境を気にせず起動ができます
-- そのため、アプリ開発でしばしば起こる「テスト環境と本番環境でモジュールのバージョンが違うので起動に失敗する」がありません
+::: tip
 
-:::tip
-docker inspect <コンテナ名>コマンドでコンテナの詳細情報を確認できます
-:::
+- Ctl+C でプログラムから抜けられます
+  :::
+- 今度はホスト OS の 9091 ポートとコンテナ内 8080 ポートをバインドしました
+- ブラウザから以下にアクセスすると、output.txt にログが追記されます
+  [http://localhost:9091](http://localhost:9091)
+
+- ここで現在起動しているコンテナを削除し、再度同名のコンテナを立ち上げます
+
+```sh
+docker stop output-node-docker
+docker rm output-node-docker
+docker run --name output-node-docker -p 9091:8080 -d output-node-docker
+docker ps
+docker exec -it output-node-docker /bin/bash
+
+== コンテナの中 ==
+ls -la
+```
+
+- output.txt がなくなりました
+- Docker は、コンテナ自体は起動されても更新は保存されず、明示的にコミットしなければコンテナ破棄時に変更分が消えてしまう性質(揮発性)があります
+- そのためログやデータなど、永続化したいファイルがある時はボリュームマウント機能を利用します
+- もう一度先ほどのコンテナを削除します
+
+```sh
+docker stop output-node-docker
+docker rm output-node-docker
+```
+
+- ホスト OS 側で適当な場所にファイル永続化用ディレクトリを作成します
+
+```sh
+mkdir /Users/machida/Documents/docker-mnt
+```
+
+- 以下のようにファイル群を修正します
+- `node-docker/Dockerfile`
+
+```dockerfile {5}
+#変更部分のみ記載
+
+#アプリケーションディレクトリを作成
+WORKDIR /usr/src/app
+RUN mkdir /usr/src/app/log
+```
+
+- `node-docker/server.js`
+
+```jsx {4}
+//変更部分のみ記載
+
+//ファイル出力先を変更
+fs.appendFileSync("log/output.txt", message, (err) => {
+  if (err) throw err;
+  console.log("ファイルが正常に出力されました。");
+});
+```
+
+- 資源を修正したのでイメージをビルドし直します
+
+```sh
+cd <資源が格納されているディレクトリ>
+docker build -t output-node-docker .
+docker run --name output-node-docker -v <ファイル永続化用ディレクトリのフルパス>:/usr/src/app/log -p 9091:8080 -d output-node-docker
+docker ps
+```
+
+- アプリにアクセスして output.txt にログを出力させます
+  [http://localhost:9091](http://localhost:9091)
+
+- ホスト OS 側から確認します
+
+```sh
+cd /Users/machida/Documents/docker-mnt
+ls -la
+```
+
+- ログファイルが存在します
+- ホスト OS の`/Users/machida/Documents/docker-mnt`をコンテナ内の`usr/src/app/log`にマウントしたため、log 配下のファイルはホスト OS 側から確認ができます
+- コンテナを削除、再度起動します
+
+```sh
+docker stop output-node-docker
+docker rm output-node-docker
+docker run --name output-node-docker -v /Users/machida/Documents/docker-mnt:/usr/src/app/log -p 9091:8080 -d output-node-docker
+docker exec -it output-node-docker /bin/bash
+
+~コンテナの中~
+ls -la log
+```
+
+- ログファイルが残っています
+- ブラウザからアプリにアクセスすると、先ほどのファイルの続きとして追記できます
+
+## 3-2. DockerRegistry
+
+- イメージを Pull する時に DockerHub からイメージ検索、取得していました
+- システム内でイメージを管理したい時に DockerRegistry を用います
+- DockerRegistry を構築してみましょう
+
+```sh
+mkdir /Users/machida/Documents/registry
+
+docker run -d -p 5000:5000 -v /Users/machida/Documents/registry:/var/lib/registry --name registry registry:2.3.0
+```
+
+- オプションの説明
+
+  - -d: バックグラウンドで起動
+  - -p: ホスト OS 5000 番ポートとコンテナ内 5000 番ポートをバインド
+  - -v: ホスト OS `/User ~`とコンテナ内 `/var/lib/registry`をマウント
+  - --name: コンテナ名を指定
+
+- [http://localhost:5000/v2/\_catalog](http://localhost:5000/v2/_catalog)にアクセス
+- DockerRegistry のリポジトリ一覧を表示。`{"repositories":[]}`が表示されれば OK
+
+- 続いて DockerRegistry にイメージを Push します
+
+```sh
+docker tag output-node-docker:latest localhost:5000/output-node-docker/output-node-docker:2.0
+docker images
+docker push localhost:5000/output-node-docker/output-node-docker:2.0
+```
+
+- 再度リポジトリ一覧にアクセス
+- `{"repositories":["output-node-docker/output-node-docker"]}`が表示されれば OK
+- イメージのタグ一覧も取得できる
+- [http://localhost:5000/v2/<イメージ名>/tags/list](http://localhost:5000/v2/output-node-docker/output-node-docker/tags/list)
 
 ## まとめ
 
-- Dockerfile からイメージを作成、コンテナを起動できた
-- アプリ実行環境構築のコード化、ホスト OS との独立により、再現性・可搬性が高い
+- コンテナ内のファイル変更はコンテナを削除するとリセットされてしまう
+- ボリュームマウント機能を利用することでコンテナ内のファイルの永続化ができる
+- DockerRegistry を構築してイメージの管理ができる
