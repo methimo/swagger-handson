@@ -148,6 +148,8 @@ ls -la log
 - ログファイルが残っています
 - ブラウザからアプリにアクセスすると、先ほどのファイルの続きとして追記できます
 
+![volume](/images/volume.png)
+
 ## 3-2. DockerRegistry
 
 - イメージを Pull する時に DockerHub からイメージ検索、取得していました
