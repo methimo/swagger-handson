@@ -5,10 +5,11 @@
 - コンテナで稼働するアプリがログを出力する時を考えます
 - `node-docker/server.js` を修正します
 
-```jsx{4,19-23}
+```jsx{4-5,20-24}
 "use strict";
 const express = require("express");
 const dayjs = require("dayjs");
+// モジュール追加
 const fs = require("fs");
 
 const PORT = 8080;
@@ -24,7 +25,7 @@ app.get("/", (req, res) => {
 `;
   console.log(message);
 
-  //ファイル出力
+  //追加:ファイル出力
   fs.appendFileSync("output.txt", message, (err) => {
     if (err) throw err;
     console.log("ファイルが正常に出力されました。");
@@ -37,14 +38,14 @@ app.listen(PORT, HOST);
 console.log(`Running on http://${HOST}:${PORT}`);
 ```
 
-- 新しく output-node-docker というコンテナイメージを作成してコンテナを起動します
+- 新しく output-node-image というコンテナイメージを作成してコンテナを起動します
 
 ```sh
-docker build -t output-node-docker .
+docker build -t output-node-image .
 docker images
-docker run --name output-node-docker -p 9091:8080 -d output-node-docker
+docker run --name output-node -p 9091:8080 -d output-node-image
 docker ps
-docker exec -it output-node-docker /bin/bash
+docker exec -it output-node /bin/bash
 
 == コンテナの中 ==
 ls -la
@@ -62,11 +63,11 @@ tail -f output.txt
 - ここで現在起動しているコンテナを削除し、再度同名のコンテナを立ち上げます
 
 ```sh
-docker stop output-node-docker
-docker rm output-node-docker
-docker run --name output-node-docker -p 9091:8080 -d output-node-docker
+docker stop output-node
+docker rm output-node
+docker run --name output-node -p 9091:8080 -d output-node-image
 docker ps
-docker exec -it output-node-docker /bin/bash
+docker exec -it output-node /bin/bash
 
 == コンテナの中 ==
 ls -la
@@ -78,8 +79,8 @@ ls -la
 - もう一度先ほどのコンテナを削除します
 
 ```sh
-docker stop output-node-docker
-docker rm output-node-docker
+docker stop output-node
+docker rm output-node
 ```
 
 - ホスト OS 側で適当な場所にファイル永続化用ディレクトリを作成します
@@ -115,8 +116,8 @@ fs.appendFileSync("log/output.txt", message, (err) => {
 
 ```sh
 cd <資源が格納されているディレクトリ>
-docker build -t output-node-docker .
-docker run --name output-node-docker -v <ファイル永続化用ディレクトリのフルパス>:/usr/src/app/log -p 9091:8080 -d output-node-docker
+docker build -t output-node-image .
+docker run --name output-node -v <ファイル永続化用ディレクトリのフルパス>:/usr/src/app/log -p 9091:8080 -d output-node-image
 docker ps
 ```
 
@@ -135,10 +136,10 @@ ls -la
 - コンテナを削除、再度起動します
 
 ```sh
-docker stop output-node-docker
-docker rm output-node-docker
-docker run --name output-node-docker -v /Users/machida/Documents/docker-mnt:/usr/src/app/log -p 9091:8080 -d output-node-docker
-docker exec -it output-node-docker /bin/bash
+docker stop output-node
+docker rm output-node
+docker run --name output-node -v /Users/machida/Documents/docker-mnt:/usr/src/app/log -p 9091:8080 -d output-node-image
+docker exec -it output-node /bin/bash
 
 ~コンテナの中~
 ls -la log
@@ -172,18 +173,19 @@ docker run -d -p 5000:5000 -v /Users/machida/Documents/registry:/var/lib/registr
 - 続いて DockerRegistry にイメージを Push します
 
 ```sh
-docker tag output-node-docker:latest localhost:5000/output-node-docker/output-node-docker:2.0
+docker tag output-node-image:latest localhost:5000/output-node-image/output-node-image:2.0
 docker images
-docker push localhost:5000/output-node-docker/output-node-docker:2.0
+docker push localhost:5000/output-node-image/output-node-image:2.0
 ```
 
+- タグを 2.0 として打ちました。イメージを更新する時はタグのバージョンを変えていきます
 - 再度リポジトリ一覧にアクセス
 - `{"repositories":["output-node-docker/output-node-docker"]}`が表示されれば OK
 - イメージのタグ一覧も取得できる
-- [http://localhost:5000/v2/<イメージ名>/tags/list](http://localhost:5000/v2/output-node-docker/output-node-docker/tags/list)
+- [http://localhost:5000/v2/<イメージ名>/tags/list](http://localhost:5000/v2/output-node-image/output-node-image/tags/list)
 
 ## まとめ
 
 - コンテナ内のファイル変更はコンテナを削除するとリセットされてしまう
 - ボリュームマウント機能を利用することでコンテナ内のファイルの永続化ができる
-- DockerRegistry を構築してイメージの管理ができる
+- DockerRegistry を構築してイメージのバージョン管理ができる

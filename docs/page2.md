@@ -41,19 +41,26 @@ docker ps -a
 > 944a24018e5d        hello-world         "/hello"                 4 minutes ago       Exited (0) 4 minutes ago                           hello-world-machida
 ```
 
-- 処理が終わったので削除しましょう
+- 処理が終わったのでコンテナを削除します
 
 ```sh
 docker rm hello-world-machida
 docker ps -a
 ```
 
-- 削除できない場合はコンテナ ID を指定して削除してください
+- 続いてイメージも削除します
+
+```
+docker rmi hello-world
+docker images
+```
+
+- 削除できない場合はコンテナ ID(16 真数の文字列) を指定して削除してください
 
 ## 2-2. コンテナイメージ作成
 
-- 2-1 では完成しているイメージを取得しました
-- 今度はイメージを作成してみます
+- 2-1 では完成しているイメージを取得してコンテナを起動しました
+- 今度はイメージを作成します
 - まずはホスト OS 側で作業用ディレクトリを作成します
 
 ```
@@ -150,17 +157,17 @@ cd node-docker
 ls -la
 #4ファイルがあることを確認
 
-docker build -t hello-node-docker .
-# Successfully tagged hello-node-docker:latest が表示されればOK
+docker build -t hello-node-image .
+# Successfully tagged hello-node-image:latest が表示されればOK
 
 docker images
-# hello-node-docker イメージが作成されていればOK
+# hello-node-image イメージが作成されていればOK
 ```
 
 - 作成したイメージからコンテナを起動します
 
 ```sh
-docker run --name hello-node-docker -p 9090:8080 -d hello-node-docker
+docker run --name hello-node -p 9090:8080 -d hello-node-image
 docker ps
 # hello-node-docker コンテナが表示されればOK
 ```
@@ -173,13 +180,13 @@ docker ps
 
 :::tip
 
-- DockerToolBox を利用している場合、VirtualBox が建てたマシンの IP になります
-  [http://192.168.99.100:9090](http://192.168.99.100:9090)
+- DockerToolBox を利用している場合、VirtualBox が建てたマシンの IP になります(以降の演習も同様です)
+  - [http://192.168.99.100:9090](http://192.168.99.100:9090)
 - 出典：[https://qiita.com/amuyikam/items/ef3f8e8e25c557f68f6a](https://qiita.com/amuyikam/items/ef3f8e8e25c557f68f6a)
   :::
 
 ```sh
-docker logs hello-node-docker
+docker logs hello-node
 # コンテナ内の標準出力ログを確認するコマンド
 # Container Access!!! が表示されればOK
 ```
@@ -193,7 +200,7 @@ docker logs hello-node-docker
 
 ```sh
 node -v
-docker exec -it hello-node-docker /bin/bash
+docker exec -it hello-node /bin/bash
 
 == コンテナの中 ==
 ls -la
