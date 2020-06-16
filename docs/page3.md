@@ -171,6 +171,13 @@ docker ps
   [http://localhost:9090](http://localhost:9090)
 - HelloWorld が表示されれば OK
 
+:::tip
+
+- DockerToolBox を利用している場合、VirtualBox が建てたマシンの IP になります
+  [http://192.168.99.100:9090](http://192.168.99.100:9090)
+- 出典：[https://qiita.com/amuyikam/items/ef3f8e8e25c557f68f6a](https://qiita.com/amuyikam/items/ef3f8e8e25c557f68f6a)
+  :::
+
 ```sh
 docker logs hello-node-docker
 # コンテナ内の標準出力ログを確認するコマンド
