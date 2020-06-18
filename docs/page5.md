@@ -38,12 +38,12 @@ docker run -d -p 8086:80 -e ENV_DOCKER_REGISTRY_HOST=172.17.0.2 -e ENV_DOCKER_RE
 ```
 
 - オプション解説
-  - コンテナをバックグラウンド起動する -> -d
-  - ホスト OS の`8086`ポートをコンテナ内ポートの`80`にバインドする -> -p 8086:80
-  - コンテナ名を `docker-registry-frontend` とする -> --name docker-registry-frontend
+  - コンテナをバックグラウンド起動する -> `-d`
+  - ホスト OS の`8086`ポートをコンテナ内ポートの`80`にバインドする -> `-p 8086:80`
+  - コンテナ名を `docker-registry-frontend` とする -> `--name docker-registry-frontend`
   - コンテナ内に以下の環境変数を渡す
-    - ENV_DOCKER_REGISTRY_HOST=`172.17.0.2` -> -e ~~~
-    - ENV_DOCKER_REGISTRY_PORT=`5000` -> -e ~~~
+    - ENV_DOCKER_REGISTRY_HOST=`172.17.0.2` -> `-e ~~~`
+    - ENV_DOCKER_REGISTRY_PORT=`5000` -> `-e ~~~`
 
 * ブラウザからアクセス
   [http://localhost:8086](http://localhost:8086)

@@ -181,9 +181,10 @@ docker push localhost:5000/output-node-image/output-node-image:2.0
 ```
 
 - タグを 2.0 として打ちました。イメージを更新する時はタグのバージョンを変えていきます
+- タグ名は自由に設定できます
 - 再度リポジトリ一覧にアクセス
 - `{"repositories":["output-node-docker/output-node-docker"]}`が表示されれば OK
-- イメージのタグ一覧も取得できる
+- イメージのタグ一覧も取得できます
 - [http://localhost:5000/v2/<イメージ名>/tags/list](http://localhost:5000/v2/output-node-image/output-node-image/tags/list)
 
 ## まとめ
