@@ -4,7 +4,8 @@
 
 - https://editor.swagger.io/ にアクセス
 - 左側は YAML のエディタ、右側は生成される
-- Slack で配布した`petsore.yaml`の中身をコピーし、SwaggerEditor の
+- Slack で配布した`petsore.yaml`の中身をコピーし、SwaggerEditor の貼り付けると、SwaggerUI が生成される
+  <img src="/images/se" width="50%">
 
 ```
 
