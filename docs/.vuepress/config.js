@@ -1,5 +1,5 @@
 module.exports = {
-  title: "Docker Handson",
+  title: "Swagger Handson",
   themeConfig: {
     sidebar: ["/page0", "/page1", "/page2", "/page3", "/page4", "/page5"],
   },
