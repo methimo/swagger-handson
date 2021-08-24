@@ -1,52 +1,33 @@
 # 2. 実践編
 
-## 2-1. Swagger を編集して API を描いてみよう
+## 2-1. SwaggerEditor を使って API の仕様を書く
 
-- https://editor.swagger.io/ にアクセス
-- 左側は YAML のエディタ、右側は生成される
+- 基礎編でも触れましたが、OpenAPISpec の方がバージョンが新しいのでこの後は OpenAPISpec に寄せて説明します
+- [SwaggerEditor](https://editor.swagger.io/) にアクセス
+- 左側は YAML のエディタ、右側は SwaggerUI によって生成されるドキュメント
 - Slack で配布した`petsore.yaml`の中身をコピーし、SwaggerEditor の貼り付けると、SwaggerUI が生成される
-  <img src="/images/se" width="50%">
+  <img src="/images/se.png" width="50%">
 
+- 適当なところを編集してみましょう。11 行目を編集します
+
+```yaml
+servers:
+  - url: "http://localhost:8080/v2"
 ```
 
-```
+- 右側の SwaggerUI の Servers も v2 に変更されました
+- このように YAML を編集することでリアルタイムに設計書を反映させることができます
 
-- hello-world という名前のイメージを DockerHub から検索し、取得しました
-- 現在自分のリポジトリに hello-world イメージがあります
-- イメージからコンテナを起動しましょう
-
-```
-docker run --name hello-world-machida hello-world
-```
-
-- hello-world イメージから hello-world-machida という名前のコンテナを作成して起動しました
-- `Hello from Docker! ~略~` が表示されれば OK です
-- このコンテナはメッセージを表示するだけのものです
-- 起動中のコンテナ一覧を取得します
-
-```sh
-docker ps
-```
-
-- 何も存在しません
-- コンテナは処理を全て実行すると終了する特徴があります
-- docker ps -a オプションをつけると終了したコンテナも含めて表示されます
-
-```sh
-docker ps -a
-
-> CONTAINER ID        IMAGE               COMMAND                  CREATED             STATUS                        PORTS                NAMES
-> 944a24018e5d        hello-world         "/hello"                 4 minutes ago       Exited (0) 4 minutes ago                           hello-world-machida
-```
-
-- 処理が終わったのでコンテナを削除します
-
-```sh
-docker rm hello-world-machida
-docker ps -a
-```
-
-- 続いてイメージも削除します
+- OpenAPISpec は以下要素で構成されます
+  |要素|必須|概要|
+  |----|----|----|
+  |openapi|○|OpenAPISpec のバージョンを記載。openapi の場合 3.0.0 を指定。Swagger を指定する場合は`swagger:"2.0"`|
+  |info |○|API のバージョンや作成者などメタ情報|
+  |servers |-|接続先を記載|
+  |paths |○|API のエンドポイントと、具体的にどのような操作ができるかを表現|
+  |components |-|YAML 内の子要素を定義|
+  |security |-|API の認証方法を定義|
+  |tags |-|SwaggerUI 用のタグ情報を定義|
 
 ```
 docker rmi hello-world
