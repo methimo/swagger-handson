@@ -1,52 +1,60 @@
-# 座学編
+# 1.座学編
 
-## API ってなに
+## 1-1. API ってなに
 
-- 1 台の物理サーバを複数の仮想サーバに分割して利用する仕組み
+- ここでは WebAPI のことをさしていいます
+- 他のシステムの機能を切り出して、他から使えるようにする仕組み
+- 呼び出し元をリクエスタ、呼び出される先をプロバイダを呼ぶ
+- 通信には HTTP を利用するのが一般的
+  <img src="/images/api" width="30%">
+- 昨今ではいろいろな企業が API を提供し、Fintech 企業は API を活用した新しいサービス
 
-### 仮想化の手法
+- HTTP リクエスト、レスポンスの説明は割愛
 
-- ホスト OS：物理サーバ上にインストールした OS
-- ゲスト OS：仮想化ソフトウェア上で起動する OS
+  - わからん！という人は以下を参考にしてください
+    - https://itsakura.com/network-http-get-post
 
-1. ホスト型
+- 通信の流れはブラウザ上で確認できます
+  - ブラウザ上で F12 か右クリック → 検証で開発者ウインドウを開き、Network を選択 n
+  - ブラウザ上に実行結果が帰ってきました
+  - また開発者ウインドウでは通信の内容が確認できます
 
-   - ホスト OS 上にインストールした仮想化ソフトウェアから仮想のハードウェア環境をエミュレートすることで仮想サーバを実現
-   - ハードウェアにアクセスする必要があるためオーバヘッドが大きい
-   - 代表的な製品：VirtualBox(Oracle)
+## 1-2. OpenAPISpec(Swagger) ってなに
 
-     <img src="/images/host.png" width="50%">
+- API のインターフェース仕様を記述するための標準フォーマット
+  - 昔は SwaggerSpecification と呼ばれていたが、2015 年に OpenAPI の規格を定める団体に移管されてから OpenAPISpecification に改名
+  - 昨今では OpenAPISpec を元にした実装やツール達をまとめて一般的に Swagger と呼んでいる
+  - SwaggerSpec を中心として、様々な開発補助ツールが展開されている
+    |用語(Swagger)|用語(OpenAPISpec)|概要|
+    |----|----|----|
+    |Swagger Spec |OpenAPISpecification|API に対して Swagger の仕様に準じたドキュメント|
+    |Swagger Editor ||Swagger Spec の設計書を記載するためのエディタ|
+    |Swagger UI ||Swagger Spec で記載された設計からドキュメントを HTML 形式で自動生成するツール|
+    |Swagger Codegen |OpenAPI Generator|Swagger Spec で記載された設計から API のモックを自動生成するツール|
+    |Swagger Core ||Java で書かれたの API のソースコードから API の設計ドキュメントを作ってくれるツール|
+  -
 
-1. ハイパーバイザ型
+1. SwaggerSpec
 
-   - ハードウェアに直接インストールされている仮想化ソフトウェア(ハイパーバイザ)を利用し、直接ハードウェアを制御することで仮想化を実現する
-   - ホスト OS が不要。
-   - 代表的な製品：XenServer(Citrix), Hyper-V(Microsoft)
+- API 仕様の標準フォーマット
+- YAML,JSON 形式で表現される
 
-     <img src="/images/hypervisor.png" width="50%">
+2. SwaggerEditor
 
-1. コンテナ型
+- SwaggerSpec に準拠した yaml を編集することのできる Web エディタ
+- SwaggerUI,Codegen との連携が可能
 
-   - ホスト OS 上に論理的な区画(コンテナ)を作り、それぞれで独立したアプリケーション実行環境を稼働させる
-   - ホスト OS からは各コンテナは 1 つのプロセスとして稼働し、OS カーネルやリソース(CPU,メモリ)を複数コンテナで共有する
-   - ホスト OS のリソースを直接利用するため,オーバーヘッドが少ない
-   - 代表的ソフトウェア：Docker(Docker Inc.)
+3. SwaggerUI
 
-     <img src="/images/container.png" width="50%">
+- SwaggerSpec から設計ドキュメントを生成するツール
+- Fintech 企業との API 仕様のやりとりはこいつで行われることが多い
 
-## 1-2. Swagger ってなに
+4. SwaggerCodegen
 
-![abst](/images/abst.png)
-
-- Docker デーモン
-  - Docker コマンドの実行者
-- Docker クライアント
-  - ユーザが入力するインタフェース。コマンドラインや GUI がある
-
-## 1-3. モックってなに
-
-- メリット
-  - OS 起動がないため起動が早い
-  - コンテナ内で独立した環境を保持できるため本番/テスト環境の差分が発生しない(可搬性)
-  - イメージがあるため環境を破壊してもすぐ復元できる(再現性)
-  - カーネルのメモリが節約できアプリの集約密度をあげることができる
+- SwaggerSpec から API のモックやスタブのソースコードを自動生成してくれるツール
+- 様々な言語、フレームワークに対応している
+- モック：送信メッセージが正しいかを確認するためのダミープロバイダ
+- テスト工程において色々なダミーを作ると思いますが、それぞれの用語の違いは以下で調べてください
+- https://craftsman-software.com/posts/38
+- 各ツールの関連性は以下のようなイメージ
+  <img src="/images/swatool" width="80%">
