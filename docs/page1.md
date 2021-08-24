@@ -6,16 +6,20 @@
 - 他のシステムの機能を切り出して、他から使えるようにする仕組み
 - 呼び出し元をリクエスタ、呼び出される先をプロバイダを呼ぶ
 - 通信には HTTP を利用するのが一般的
-  <img src="/images/api" width="30%">
-- 昨今ではいろいろな企業が API を提供し、Fintech 企業は API を活用した新しいサービス
+  ![api](/images/api)
+- 昨今ではいろいろな企業が API を提供し、Fintech 企業は API を活用した新しいサービスを創り出す、という流れになっている
+
+  - 例えば MoneyForward などの家計簿アプリではバックエンドとして銀行の残高紹介 API を実行しています
 
 - HTTP リクエスト、レスポンスの説明は割愛
-
   - HTTP ヘッダーって何?リクエストパラメータとパスパラメータの違いって何?という人は以下を参考にしてください
-    - https://itsakura.com/network-http-get-post
-    - https://qiita.com/Shokorep/items/b7697a146cbb1c3e9f0b
+    - [https://itsakura.com/network-http-get-post](https://itsakura.com/network-http-get-post)
+    - [https://qiita.com/Shokorep/items/b7697a146cbb1c3e9f0b](https://qiita.com/Shokorep/items/b7697a146cbb1c3e9f0b)
 
-- 通信の流れはブラウザ上で確認できます
+* 試しに API を実行してみましょう
+  - ブラウザで以下にアクセスします
+  - [http://geoapi.heartrails.com/api/xml?method=getStations&postal=1040053](http://geoapi.heartrails.com/api/xml?method=getStations&postal=1040053)
+* 通信の流れはブラウザ上で確認できます
   - ブラウザ上で F12 か右クリック → 検証で開発者ウインドウを開き、Network を選択
   - ブラウザ上に実行結果が帰ってきました
   - また開発者ウインドウでは通信の内容が確認できます
@@ -61,6 +65,6 @@
 - 様々な言語、フレームワークに対応している
 - モック：送信メッセージが正しいかを確認するためのダミープロバイダ
 - テスト工程において色々なダミーを作ると思いますが、それぞれの用語の違いは以下で調べてください
-- https://craftsman-software.com/posts/38
+- [https://craftsman-software.com/posts/38](https://craftsman-software.com/posts/38)
 - 各ツールの関連性は以下のようなイメージ
   <img src="/images/swatool" width="80%">
