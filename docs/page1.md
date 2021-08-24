@@ -6,7 +6,7 @@
 - 他のシステムの機能を切り出して、他から使えるようにする仕組み
 - 呼び出し元をリクエスタ、呼び出される先をプロバイダを呼ぶ
 - 通信には HTTP を利用するのが一般的
-  ![api](/images/api)
+  ![api](/images/api.png)
 - 昨今ではいろいろな企業が API を提供し、Fintech 企業は API を活用した新しいサービスを創り出す、という流れになっている
 
   - 例えば MoneyForward などの家計簿アプリではバックエンドとして銀行の残高紹介 API を実行しています
@@ -41,8 +41,8 @@
     - OpenAPISpec を元に、YAML を書く(YAML を書く際に SwaggerEditor を使用)
     - YAML を元に設計書やダミーサーバを作成(SwaggerUI,SwaggerCodegen)
     - 作成した YAML を公開(SwaggerHub)
-      <img src="/images/swatool1" width="30%">
-      <img src="/images/swatool2" width="30%">
+      <img src="/images/swatool1.png" width="30%">
+      <img src="/images/swatool2.png" width="30%">
 
 1. SwaggerSpec
 
@@ -67,4 +67,4 @@
 - テスト工程において色々なダミーを作ると思いますが、それぞれの用語の違いは以下で調べてください
 - [https://craftsman-software.com/posts/38](https://craftsman-software.com/posts/38)
 - 各ツールの関連性は以下のようなイメージ
-  <img src="/images/swatool" width="80%">
+  <img src="/images/swatool.png" width="80%">
