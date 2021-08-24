@@ -11,11 +11,12 @@
 
 - HTTP リクエスト、レスポンスの説明は割愛
 
-  - わからん！という人は以下を参考にしてください
+  - HTTP ヘッダーって何?リクエストパラメータとパスパラメータの違いって何?という人は以下を参考にしてください
     - https://itsakura.com/network-http-get-post
+    - https://qiita.com/Shokorep/items/b7697a146cbb1c3e9f0b
 
 - 通信の流れはブラウザ上で確認できます
-  - ブラウザ上で F12 か右クリック → 検証で開発者ウインドウを開き、Network を選択 n
+  - ブラウザ上で F12 か右クリック → 検証で開発者ウインドウを開き、Network を選択
   - ブラウザ上に実行結果が帰ってきました
   - また開発者ウインドウでは通信の内容が確認できます
 
@@ -32,7 +33,12 @@
     |Swagger UI ||Swagger Spec で記載された設計からドキュメントを HTML 形式で自動生成するツール|
     |Swagger Codegen |OpenAPI Generator|Swagger Spec で記載された設計から API のモックを自動生成するツール|
     |Swagger Core ||Java で書かれたの API のソースコードから API の設計ドキュメントを作ってくれるツール|
-  -
+  - 開発プロセスとしては以下のようなイメージ
+    - OpenAPISpec を元に、YAML を書く(YAML を書く際に SwaggerEditor を使用)
+    - YAML を元に設計書やダミーサーバを作成(SwaggerUI,SwaggerCodegen)
+    - 作成した YAML を公開(SwaggerHub)
+      <img src="/images/swatool1" width="30%">
+      <img src="/images/swatool2" width="30%">
 
 1. SwaggerSpec
 
