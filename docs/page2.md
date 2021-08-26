@@ -22,180 +22,74 @@ servers:
   |要素|必須|概要|
   |----|----|----|
   |openapi|○|OpenAPISpec のバージョンを記載。openapi の場合 3.0.0 を指定。Swagger を指定する場合は`swagger:"2.0"`|
-  |info |○|API のバージョンや作成者などメタ情報|
+  |info |○|API のバージョンや作成者などメタ情報を記載|
   |servers |-|接続先を記載|
-  |paths |○|API のエンドポイントと、具体的にどのような操作ができるかを表現|
+  |paths |○|API のエンドポイントと、具体的にどのような操作ができるかを記載|
   |components |-|YAML 内の子要素を定義|
   |security |-|API の認証方法を定義|
   |tags |-|SwaggerUI 用のタグ情報を定義|
 
-```
-docker rmi hello-world
-docker images
-```
+- SwaggerUI の画面を確認してみましょう
+- GET /pets のタブを開く
+- Parameters で何をパラメータに指定すべきか、Responses でどんなコマンドでリクエストを送れるか、どんなレスポンスが帰ってくるかが記載されています
+- `Try it out!`を押してパラメータを入力し Execute してみましょう
+- 実行した結果が帰ってきます
+- このように SwaggerUI だけでどのような挙動の API か仕様を確認することができます
 
-- 削除できない場合はコンテナ ID(16 真数の文字列) を指定して削除してください
+## 2-2. OpenAPIGenerator でコードを生成する
 
-## 2-2. コンテナイメージ作成
-
-- 2-1 では完成しているイメージを取得してコンテナを起動しました
-- 今度はイメージを作成します
-- まずはホスト OS 側で作業用ディレクトリを作成します
-
-```
-mkdir node-docker
-```
-
-- ディレクトリの配下に以下 4 ファイルを作成します
-- 好きなエディタを開いて編集してください
-
-1. `node-docker/server.js`
-   - アプリケーションロジックファイル
-
-```jsx
-"use strict";
-const express = require("express");
-const dayjs = require("dayjs");
-
-const PORT = 8080;
-const HOST = "0.0.0.0";
-
-// App
-const app = express();
-app.get("/", (req, res) => {
-  const time = dayjs().format("YYYY-MM-DD HH:mm:ss");
-  const message =
-    time +
-    ` Container Access!!!
-`;
-  console.log(message);
-  res.send("Hello World");
-});
-
-app.listen(PORT, HOST);
-```
-
-2. `node-docker/package.json`
-   - js のライブラリ依存関係を記載したファイル
-
-```json
-{
-  "name": "docker_web_app",
-  "version": "1.0.0",
-  "description": "Node.js on Docker",
-  "author": "First Last <first.last@example.com>",
-  "main": "server.js",
-  "scripts": {
-    "start": "node server.js"
-  },
-  "dependencies": {
-    "express": "^4.16.1",
-    "dayjs": "^1.8.11"
-  }
-}
-```
-
-3. `node-docker/Dockerfile`
-   - イメージの元となるファイル。ベースとなるイメージにディレクトリ作成や資源配置をして、アプリケーション実行環境を構築します
-
-```dockerfile
-#Node.js v12がインストールされたベースイメージ
-FROM node:12
-
-#アプリケーションディレクトリを作成
-WORKDIR /usr/src/app
-
-#アプリケーションの依存関係をインストール
-COPY package*.json ./
-RUN npm install
-
-#アプリケーションのソースを配置
-#ホストOSのカレントディレクトリ配下をコンテナ内の作業ディレクトリにコピー
-COPY . .
-
-#コンテナがアクセスを許可するポート指定
-EXPOSE 8080
-
-#コンテナ起動時に実行するコマンドを指定
-CMD [ "node", "server.js" ]
-```
-
-4. `node-docker/.dockerignore`
-   - build 時に資源のコピー対象から除外するリストファイル
-
-```dockerfile
-node_modules
-npm-debug.log
-```
-
-- イメージをビルドします
+- OpenAPISpec で仕様を示した YAML がかけました
+- この YAML を元にコードを生成してみましょう
+- SwaggerCodegen であれば SwaggerEditor の上部`Generate Server`からコード生成できますが、Java の対応バージョンが`1.7`だったり最新の OpenAPISpec に対応していなかったりイマイチです
+- なので後継である OpenAPIGenerator を使います.まずはダウンロードします
 
 ```sh
-cd node-docker
-
-ls -la
-#4ファイルがあることを確認
-
-docker build -t hello-node-image .
-# Successfully tagged hello-node-image:latest が表示されればOK
-
-docker images
-# hello-node-image イメージが作成されていればOK
+#for Linux,Mac
+wget https://repo1.maven.org/maven2/org/openapitools/openapi-generator-cli/5.2.1/openapi-generator-cli-5.2.1.jar
 ```
 
-- 作成したイメージからコンテナを起動します
+- wget コマンドが入ってない場合は以下にアクセスしましょう
+  [https://repo1.maven.org/maven2/org/openapitools/openapi-generator-cli/5.2.1/openapi-generator-cli-5.2.1.jar](https://repo1.maven.org/maven2/org/openapitools/openapi-generator-cli/5.2.1/openapi-generator-cli-5.2.1.jar)
+
+* 動作確認
 
 ```sh
-docker run --name hello-node -p 9090:8080 -d hello-node-image
-docker ps
-# hello-node-docker コンテナが表示されればOK
+java -jar openapi-generator-cli-5.2.1.jar list
 ```
 
-- docker run を単に実行すると、アプリ起動後コンテナは終了してしまいます
-- アプリ起動後もコンテナを動かすためにバックグラウンド(-d オプション)で起動します
-- コンテナ上で稼働するアプリにブラウザからアクセスします
-  [http://localhost:9090](http://localhost:9090)
-- HelloWorld が表示されれば OK
-
-:::tip
-
-- DockerToolBox を利用している場合、VirtualBox が建てたマシンの IP になります(以降の演習も同様です)
-  - [http://192.168.99.100:9090](http://192.168.99.100:9090)
-- 出典：[https://qiita.com/amuyikam/items/ef3f8e8e25c557f68f6a](https://qiita.com/amuyikam/items/ef3f8e8e25c557f68f6a)
-  :::
+- Generator が対応している言語の一覧です.この Gemnerator は APIServer のコードはもちろん、仕様の API を呼び出すクライアントも生成することができます
+- Generator を実行してコード生成しましょう！今回は APIServer を`spring(Java)`で生成、出力先フォルダを`swagger-handson`にします
 
 ```sh
-docker logs hello-node
-# コンテナ内の標準出力ログを確認するコマンド
-# Container Access!!! が表示されればOK
+java -jar openapi-generator-cli-5.2.1.jar generate -i petstore_0821.yaml -g spring -o swagger-handson
 ```
 
-![docker1](/images/docker1.png)
+色々出力されて以下が出れば OK です
 
-- ホスト OS の 9090 ポートとコンテナの 8080 ポートをバインド
-- アプリはコンテナ内で 8080 ポートで起動しているため、ユーザからはホスト OS の 9090 ポートでアクセスできる
-
-- 起動したコンテナの中に入ってみましょう
-
-```sh
-node -v
-docker exec -it hello-node /bin/bash
-
-== コンテナの中 ==
-ls -la
-node -v
+```
+################################################################################
+# Thanks for using OpenAPI Generator.                                          #
+# Please consider donation to help us maintain this project 🙏                 #
+# https://opencollective.com/openapi_generator/donate                          #
+################################################################################
 ```
 
-- ホスト OS とコンテナ内の Node のバージョンが異なるのがわかります
-- Dockerfile で Node やライブラリをインストールするよう記載しました
-- このようにアプリ実行環境の構築をコード化することで、環境構築がいつでも再現できます
-- アプリ実行環境を構築済みのイメージがあれば、イメージを元にコンテナを即座に起動できます
-- またコンテナ内の環境はホスト OS と独立しているため、ホスト OS の環境を気にせず起動ができます
-- そのため、アプリ開発でしばしば起こる「テスト環境と本番環境でモジュールのバージョンが違うので起動に失敗する」がありません
+- 好きな IDE で生成したコードを開いてみましょう
+- `src`配下にソースコードがモリモリ生成されています
+  <img src="/images/code.png" width="50%">
+- ではこの API を起動してみましょう
+- `OpenAPI2SpringBoot.java`を右クリックし起動
+  <img src="/images/run.png" width="50%">
+- 最後が以下になれば OK です
 
-:::tip
-docker inspect <コンテナ名>コマンドでコンテナの詳細情報を確認できます
-:::
+```
+[main] org.openapitools.OpenAPI2SpringBoot      : Started OpenAPI2SpringBoot in xxxx seconds (JVM running for 6.08)
+```
+
+- 以下にアクセスすると、SwagerUI のページにリダイレクトします
+  [http://localhost:8080/](http://localhost:8080/)
+- 以下にアクセスすると、API のエンドポイントを実行した結果を返します
+  [http://localhost:8080/v1/pets/1](http://localhost:8080/v1/pets/1)
 
 ## まとめ
 

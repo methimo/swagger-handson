@@ -1,191 +1,20 @@
-# 3. Docker あれこれ
+# 3. OpenAPISpec の記載に役立つツール群
 
-## 3-1. 揮発性とファイル永続化
+## 3-1. VSCode の Swagger プラグイン
 
-- コンテナで稼働するアプリがログを出力する時を考えます
-- `node-docker/server.js` を修正します
+## 3-2. StoplightStudio
 
-```jsx{4-5,20-24}
-"use strict";
-const express = require("express");
-const dayjs = require("dayjs");
-// モジュール追加
-const fs = require("fs");
+- OpenAPISpec は YAML を記載する必要があるので、YAML 力や OpenAPISpec の記法を学ぶ必要がある
+- 記法を意識せず GUI で OpenAPISpec を記載することができる
 
-const PORT = 8080;
-const HOST = "0.0.0.0";
+[https://stoplight.io/studio/](https://stoplight.io/studio/)
 
-// App
-const app = express();
-app.get("/", (req, res) => {
-  const time = dayjs().format("YYYY-MM-DD HH:mm:ss");
-  const message =
-    time +
-    ` Container Access!!!
-`;
-  console.log(message);
+- 右上の`GetStarted for FREE`から登録
+- 登録するとメールアドレス宛にワークスペースの URL が送られてきます
 
-  //追加:ファイル出力
-  fs.appendFileSync("output.txt", message, (err) => {
-    if (err) throw err;
-    console.log("ファイルが正常に出力されました。");
-  });
-
-  res.send("Hello World");
-});
-
-app.listen(PORT, HOST);
-console.log(`Running on http://${HOST}:${PORT}`);
-```
-
-- 新しく output-node-image というコンテナイメージを作成してコンテナを起動します
-
-```sh
-docker build -t output-node-image .
-docker images
-docker run --name output-node -p 9091:8080 -d output-node-image
-docker ps
-docker exec -it output-node /bin/bash
-
-== コンテナの中 ==
-ls -la
-tail -f output.txt
-```
-
-::: tip
-
-- Ctl+C でプログラムから抜けられます
-  :::
-- 今度はホスト OS の 9091 ポートとコンテナ内 8080 ポートをバインドしました
-- ブラウザから以下にアクセスすると、output.txt にログが追記されます
-  [http://localhost:9091](http://localhost:9091)
-
-- ここで現在起動しているコンテナを削除し、再度同名のコンテナを立ち上げます
-
-```sh
-docker stop output-node
-docker rm output-node
-docker run --name output-node -p 9091:8080 -d output-node-image
-docker ps
-docker exec -it output-node /bin/bash
-
-== コンテナの中 ==
-ls -la
-```
-
-- output.txt がなくなりました
-- Docker は、コンテナ自体は起動されても更新は保存されず、明示的にコミットしなければコンテナ破棄時に変更分が消えてしまう性質(揮発性)があります
-- そのためログやデータなど、永続化したいファイルがある時はボリュームマウント機能を利用します
-- もう一度先ほどのコンテナを削除します
-
-```sh
-docker stop output-node
-docker rm output-node
-```
-
-- ホスト OS 側で適当な場所にファイル永続化用ディレクトリを作成します
-
-```sh
-mkdir /Users/machida/Documents/docker-mnt
-```
-
-- 以下のようにファイル群を修正します
-- `node-docker/Dockerfile`
-
-```dockerfile {5}
-#変更部分のみ記載
-
-#アプリケーションディレクトリを作成
-WORKDIR /usr/src/app
-RUN mkdir /usr/src/app/log
-```
-
-- `node-docker/server.js`
-
-```jsx {4}
-//変更部分のみ記載
-
-//ファイル出力先を変更
-fs.appendFileSync("log/output.txt", message, (err) => {
-  if (err) throw err;
-  console.log("ファイルが正常に出力されました。");
-});
-```
-
-- 資源を修正したのでイメージをビルドし直します
-
-```sh
-cd <資源が格納されているディレクトリ>
-docker build -t output-node-image .
-docker run --name output-node -v <ファイル永続化用ディレクトリのフルパス>:/usr/src/app/log -p 9091:8080 -d output-node-image
-docker ps
-```
-
-- アプリにアクセスして output.txt にログを出力させます
-  [http://localhost:9091](http://localhost:9091)
-
-- ホスト OS 側から確認します
-
-```sh
-cd /Users/machida/Documents/docker-mnt
-ls -la
-```
-
-- ログファイルが存在します
-- ホスト OS の`/Users/machida/Documents/docker-mnt`をコンテナ内の`usr/src/app/log`にマウントしたため、log 配下のファイルはホスト OS 側から確認ができます
-- コンテナを削除、再度起動します
-
-```sh
-docker stop output-node
-docker rm output-node
-docker run --name output-node -v /Users/machida/Documents/docker-mnt:/usr/src/app/log -p 9091:8080 -d output-node-image
-docker exec -it output-node /bin/bash
-
-~コンテナの中~
-ls -la log
-```
-
-- ログファイルが残っています
-- ブラウザからアプリにアクセスすると、先ほどのファイルの続きとして追記できます
-
-![volume](/images/volume.png)
-
-## 3-2. DockerRegistry
-
-- イメージを Pull する時に DockerHub からイメージ検索、取得していました
-- システム内でイメージを管理したい時に DockerRegistry を用います
-- DockerRegistry を構築してみましょう
-
-```sh
-mkdir /Users/machida/Documents/registry
-
-docker run -d -p 5000:5000 -v /Users/machida/Documents/registry:/var/lib/registry --name registry registry:2.3.0
-```
-
-- オプションの説明
-
-  - -d: バックグラウンドで起動
-  - -p: ホスト OS 5000 番ポートとコンテナ内 5000 番ポートをバインド
-  - -v: ホスト OS `/User ~`とコンテナ内 `/var/lib/registry`をマウント
-  - --name: コンテナ名を指定
-
-- [http://localhost:5000/v2/\_catalog](http://localhost:5000/v2/_catalog)にアクセス
-- DockerRegistry のリポジトリ一覧を表示。`{"repositories":[]}`が表示されれば OK
-
-- 続いて DockerRegistry にイメージを Push します
-
-```sh
-docker tag output-node-image:latest localhost:5000/output-node-image/output-node-image:2.0
-docker images
-docker push localhost:5000/output-node-image/output-node-image:2.0
-```
-
-- タグを 2.0 として打ちました。イメージを更新する時はタグのバージョンを変えていきます
-- タグ名は自由に設定できます
-- 再度リポジトリ一覧にアクセス
-- `{"repositories":["output-node-docker/output-node-docker"]}`が表示されれば OK
-- イメージのタグ一覧も取得できます
-- [http://localhost:5000/v2/<イメージ名>/tags/list](http://localhost:5000/v2/output-node-image/output-node-image/tags/list)
+- ワークスペースにログインしたら`Add Projects`でプロジェクト作成
+- 名前は`swagger-handson`
+- 作成したら左の`APIs -> Import files`から配布した YAML を取り込む
 
 ## まとめ
 
