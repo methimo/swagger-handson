@@ -56,7 +56,7 @@ curl http://127.0.0.1:4010/pets
 - ワークスペースにログインしたら`Add Projects`でプロジェクト作成。名前は自由で OK
 - 作成したら左の`APIs -> Import files`から配布した YAML を取り込む
 - その後`petstore_0830.yaml`をクリックすると編集モードに入ります
-- 左に OpenAPISpec の大項目、右に編集画面、という形で仕様を編集できるうようになりまし<br>
+- 左に OpenAPISpec の大項目、右に編集画面、という形で API 仕様を編集できるうようになります<br>
   <img src="/images/stop2.png" width="80%">
 - 上部の　`Form <-> Code`で GUI で編集するか YAML を直接書くかを選択できます。GUI で変更した内容は YAML に即座に反映されます
 - 上部の　`Preview`で SwaggerUI 風の仕様書を確認できます
