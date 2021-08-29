@@ -89,6 +89,9 @@ java -jar openapi-generator-cli-5.2.1.jar generate -i petstore_0830.yaml -g spri
 ::: tip
 
 - IDE がない人は以下実行して直接 Maven ビルド -> 起動します
+- mvn コマンドがない場合は以下からインストール
+  - (Windows)[https://qiita.com/Junichi*M*/items/20daee936cd0c03c3115](https://qiita.com/Junichi_M_/items/20daee936cd0c03c3115)
+  - (Mac)[https://qiita.com/saitoryc/items/737ee9e711f1ebe0dcfa](https://qiita.com/saitoryc/items/737ee9e711f1ebe0dcfa)
 
 ```sh
 mvn install
