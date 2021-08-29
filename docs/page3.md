@@ -52,7 +52,7 @@
 - StoplightStudio の編集画面左上の`Publish`をクリック
 - `Project pushed to workspace`が出力されれば OK です
 - そのまま`Back to workspace`をクリック
-- 以下のように MockServer の URL が表示されていますね？YAML を Publish することで MockServer を起動してくれます。先述の Prism が YAML の Publish をトリガーに動いてくれるイメージです
+- 以下のように MockServer の URL が表示されていますね？YAML を Publish することで MockServer を起動してくれます。先述の Prism が YAML の Publish をトリガーに動いてくれるイメージです<br>
   <img src="/images/mock.png" width="50%">
 - `https://MockServerのURL/stores`にアクセスしてみましょう。先ほどエンドポイントを設計した時に example に記載した出力例が表示されます
 
