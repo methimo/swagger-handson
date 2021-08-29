@@ -32,18 +32,18 @@
     - `name`:店舗名(必須、20 文字以内、例：Kojima)
 - Model の生成
   - 左の`Models`を右クリック -> `New Model` -> `Store`と入力
-  - 以下のように入力
-    <img src="/images/store1.png" width="50%">
-    <img src="/images/store2.png" width="50%">
-    <img src="/images/store3.png" width="50%">
+  - 以下のように入力<br>
+    <img src="/images/store1.png" width="50%"><br>
+    <img src="/images/store2.png" width="50%"><br>
+    <img src="/images/store3.png" width="50%"><br>
 - 同じく`Models`を右クリック -> `New Model` -> `Stores`と入力
-  - 以下のように入力
-    <img src="/images/stores1.png" width="50%">
-    <img src="/images/stores2.png" width="50%"> -
+  - 以下のように入力<br>
+    <img src="/images/stores1.png" width="50%"><br>
+    <img src="/images/stores2.png" width="50%"><br>
 - エンドポイントの生成
   - 左の`Paths`を右クリック -> `New Path` -> `/stores`と入力
-  - 以下のように入力
-    <img src="/images/stores3.png" width="50%">
+  - 以下のように入力<br>
+    <img src="/images/stores3.png" width="50%"><br>
     <img src="/images/stores4.png" width="50%">
 
 ### 3-2-2. StoplightStudio で API 起動
