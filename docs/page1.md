@@ -38,12 +38,12 @@
     |Swagger UI ||Swagger Spec で記載された設計からドキュメントを HTML 形式で自動生成するツール|
     |Swagger Codegen |OpenAPI Generator|Swagger Spec で記載された設計から API のモックを自動生成するツール|
     |Swagger Core ||Java で書かれたの API のソースコードから API の設計ドキュメントを作ってくれるツール|
-  - 開発プロセスとしては以下のようなイメージ
-    - OpenAPISpec を元に、YAML を書く(YAML を書く際に SwaggerEditor を使用)
+  - API の開発プロセス
+    - 業務要件が決まるとどんな機能を提供する API を作るか考える必要がある
+    - 実現したい内容を元に OpenAPISpec の仕様に落とし込む(SwaggerEditor を使用して YAML を書く)
     - YAML を元に設計書やダミーサーバを作成(SwaggerUI,SwaggerCodegen)
-    - 作成した YAML を公開(SwaggerHub)<br>
-      <img src="/images/swatool1.png" width="30%"><br>
-      <img src="/images/swatool2.png" width="30%">
+    - 作成した YAML を関係者に送ったり、Public に公開する(SwaggerHub)<br>
+      <img src="/images/swatool1.png" width="80%">
 
 #### 1. SwaggerSpec
 
