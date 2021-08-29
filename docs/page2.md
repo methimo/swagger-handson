@@ -100,10 +100,17 @@ java -jar openapi-spring-1.0.0.jar
 
 - 以下にアクセスすると、SwagerUI のページにリダイレクトします
   [http://localhost:8080/](http://localhost:8080/)
-- 以下にアクセスすると、API のエンドポイントを実行した結果を返します
+- また API のエンドポイントにアクセスすると、実行した時のサンプルレスポンスを返します
   [http://localhost:8080/v1/pets/1](http://localhost:8080/v1/pets/1)
+
+::: warn
+
+- OpenAPIGenerator によって生成されたコードは本番向けのソースには向かない
+- API の基本的な振る舞い以外のコードが多く複雑な作りになっていたり、コードチェックなどを取り込んで生成することができない
+- あくまでも動作確認用、モックとして使うようにお願いします
+  :::
 
 ## まとめ
 
-- Dockerfile からイメージを作成、コンテナを起動できた
-- アプリ実行環境構築のコード化、ホスト OS との独立により、再現性・可搬性が高い
+- SwaggerEditor を使って YAML を編集し、SwaggerUI から API 仕様書を作成できた
+- OpenAPIGenerator を使って YAML からコードを生成し、モックサーバを構築できた
