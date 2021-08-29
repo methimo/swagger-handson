@@ -5,7 +5,7 @@
 - 基礎編でも触れましたが、OpenAPISpec の方がバージョンが新しいのでこの後は OpenAPISpec に寄せて説明します
 - [SwaggerEditor](https://editor.swagger.io/) にアクセス
 - 左側は YAML のエディタ、右側は SwaggerUI によって生成されるドキュメント
-- Slack で配布した`petsore.yaml`の中身をコピーし、SwaggerEditor の貼り付けると、SwaggerUI が生成される<br>
+- Slack で配布した`petstore_0830.yaml`の中身をコピーし、SwaggerEditor の貼り付けると、SwaggerUI が生成される<br>
   <img src="/images/se.png" width="80%">
 - 適当なところを編集してみましょう。11 行目を編集します
 
@@ -61,7 +61,7 @@ java -jar openapi-generator-cli-5.2.1.jar list
 - Generator を実行してコード生成しましょう！今回は APIServer を`spring(Java)`で生成、出力先フォルダを`swagger-handson`にします
 
 ```sh
-java -jar openapi-generator-cli-5.2.1.jar generate -i petstore_0821.yaml -g spring -o swagger-handson
+java -jar openapi-generator-cli-5.2.1.jar generate -i petstore_0830.yaml -g spring -o swagger-handson
 ```
 
 色々出力されて以下が出れば OK です

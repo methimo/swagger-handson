@@ -21,7 +21,7 @@ npm install -g @stoplight/prism-cli
 # 動作確認(おそらく4.3.1)
 prism mock --version
 # モック起動
-prism mock petstore_0821.yaml
+prism mock petstore_0830.yaml
 
 --- 以下のようにモックのエンドポイントが表示されればOK ---
 > [1:17:32] › [CLI] …  awaiting  Starting Prism…
@@ -37,7 +37,7 @@ curl http://127.0.0.1:4010/pets
 -------------------------------------------
 
 # レスポンスを動的に変更する
-prism mock -d petstore_0821.yaml
+prism mock -d petstore_0830.yaml
 curl http://127.0.0.1:4010/pets
 
 ```
@@ -55,7 +55,7 @@ curl http://127.0.0.1:4010/pets
   <img src="/images/stop1.png" width="80%">
 - ワークスペースにログインしたら`Add Projects`でプロジェクト作成。名前は自由で OK
 - 作成したら左の`APIs -> Import files`から配布した YAML を取り込む
-- その後`petstore_0821.yaml`をクリックすると編集モードに入ります
+- その後`petstore_0830.yaml`をクリックすると編集モードに入ります
 - 左に OpenAPISpec の大項目、右に編集画面、という形で仕様を編集できるうようになりまし<br>
   <img src="/images/stop2.png" width="80%">
 - 上部の　`Form <-> Code`で GUI で編集するか YAML を直接書くかを選択できます。GUI で変更した内容は YAML に即座に反映されます
