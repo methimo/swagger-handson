@@ -1,13 +1,6 @@
 # 4. 自由に作ってみる
 
-- DockerRegistry のイメージ一覧を GUI で確認できる Web アプリが`docker-registry-frontend`という名前のコンテナイメージとして DockerHub に公開されています
-
-- 完成イメージ
-
+- StoplightStudio を利用して、API を設計してみましょう
 - 手順
-
-1. コンテナイメージを DockerHub から検索
-2. 検索したコンテナイメージから最も STAR が多いコンテナイメージを取得
-3. コンテナを起動
-
-- 起動時に指定するオプション
+  1. StoplightStudio の`API`を右クリック-> `New OpenAPI -> YAML v3.1` を選択し新しい YAML ファイルを作成
+  2. YAML を編集し、Publish

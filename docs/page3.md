@@ -29,12 +29,17 @@ prism mock petstore_0821.yaml
 > [1:17:32] › [CLI] ▶  start     Prism is listening on http://127.0.0.1:4010
 --------------------------------------------------
 
-# モックにアクセス
+# モックにアクセス(別ターミナルを起動)
 curl http://127.0.0.1:4010/pets
 
 --- 以下のようにサンプルデータが表示されればOK ---
 > [{"id":1234,"name":"Pochi","tag":"dog","breed":"Poodle"},{"id":2345,"name":"Tama","tag":"cat","breed":"American Short Hair"}]
 -------------------------------------------
+
+# レスポンスを動的に変更する
+prism mock -d petstore_0821.yaml
+curl http://127.0.0.1:4010/pets
+
 ```
 
 ## 3-3. StoplightStudio
@@ -48,13 +53,13 @@ curl http://127.0.0.1:4010/pets
 - 右上の`GetStarted for FREE`から登録
 - 登録するとメールアドレス宛にワークスペースの URL が送られてきます<br>
   <img src="/images/stop1.png" width="80%">
-- ワークスペースにログインしたら`Add Projects`でプロジェクト作成
-- 名前はなんでも大丈夫です
+- ワークスペースにログインしたら`Add Projects`でプロジェクト作成。名前は自由で OK
 - 作成したら左の`APIs -> Import files`から配布した YAML を取り込む
 - その後`petstore_0821.yaml`をクリックすると編集モードに入ります
 - 左に OpenAPISpec の大項目、右に編集画面、という形で仕様を編集できるうようになりまし<br>
   <img src="/images/stop2.png" width="80%">
-- ちなみにですが上部の　`Form <-> Code`で GUI で編集するか YAML を直接書くかを選択できます。もちろん GUI で変更した内容は YAML に即座に反映されます
+- 上部の　`Form <-> Code`で GUI で編集するか YAML を直接書くかを選択できます。GUI で変更した内容は YAML に即座に反映されます
+- 上部の　`Preview`で SwaggerUI 風の仕様書を確認できます
 
 ### 3-3-1. StoplightStudio を活用した API 設計
 
@@ -97,4 +102,5 @@ curl http://127.0.0.1:4010/pets
 
 ## まとめ
 
--
+- Prism を使うことで YAML から直接モックサーバを作成できた
+- StoplightStudio を使うことで YAML を意識せず API 仕様を記述、モックサーバを作成できた
