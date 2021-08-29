@@ -16,17 +16,15 @@
   - ブラウザで以下にアクセスします
   - [http://geoapi.heartrails.com/api/xml?method=getStations&postal=1040053](http://geoapi.heartrails.com/api/xml?method=getStations&postal=1040053)
 
-{.info}
-: - 通信の流れはブラウザ上で確認できます
-
-- ブラウザ上で F12 か右クリック → 検証で開発者ウインドウを開き、Network を選択
-- ブラウザ上に実行結果が帰ってきました
-- また開発者ウインドウでは通信の内容が確認できます
+> - 通信の流れはブラウザ上で確認できます
+> - ブラウザ上で F12 か右クリック → 検証で開発者ウインドウを開き、Network を選択
+> - ブラウザ上に実行結果が帰ってきました
+> - また開発者ウインドウでは通信の内容が確認できます
 
 ## 1-2. OpenAPISpec(Swagger) ってなに
 
 - API のインターフェース仕様を記述するための標準フォーマット
-  - 昔は SwaggerSpec と呼ばれ SmartBear 社が開発していたが、色々喧嘩別れして別プロジェクトとして OpenAPISpec が誕生
+  - 昔は SwaggerSpec と呼ばれ SmartBear 社が開発していたが、色々喧嘩別れして別プロジェクトとして OpenAPISpec が誕生、その後 OpenAPI の標準化を推進する団体に移管
   - 昨今では OpenAPISpec:API の仕様の標準フォーマット、OpenAPISpec を元にした実装やツール達をまとめて一般的に Swagger と呼んでいる
   - 紛らわしいので、「Swagger ＝バージョンの古い記法だけど、ツールが揃っている」「OpenAPISpec ＝バージョンの新しい記法だけど、ツールは Swagger~~のものを使える」とざっくり覚えてください
   - SwaggerSpec を中心として、様々な開発補助ツールが展開されている
@@ -56,7 +54,7 @@
 
 #### 3. SwaggerUI
 
-- SwaggerSpec から設計ドキュメントを生成するツール
+- SwaggerSpec から仕様書を生成するツール、仕様書自体を指すこともある
 - Fintech 企業との API 仕様のやりとりはこいつで行われることが多い
 
 #### 4. SwaggerCodegen(OpenAPIGenerator)
