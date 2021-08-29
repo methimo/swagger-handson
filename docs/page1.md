@@ -16,10 +16,13 @@
   - ブラウザで以下にアクセスします
   - [http://geoapi.heartrails.com/api/xml?method=getStations&postal=1040053](http://geoapi.heartrails.com/api/xml?method=getStations&postal=1040053)
 
-> - 通信の流れはブラウザ上で確認できます
-> - ブラウザ上で F12 か右クリック → 検証で開発者ウインドウを開き、Network を選択
-> - ブラウザ上に実行結果が帰ってきました
-> - また開発者ウインドウでは通信の内容が確認できます
+::: tip
+
+- 通信の流れはブラウザ上で確認できます
+- ブラウザ上で F12 か右クリック → 検証で開発者ウインドウを開き、Network を選択
+- ブラウザ上に実行結果が帰ってきました
+- また開発者ウインドウでは通信の内容が確認できます
+  :::
 
 ## 1-2. OpenAPISpec(Swagger) ってなに
 
