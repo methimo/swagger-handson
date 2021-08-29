@@ -72,12 +72,12 @@ curl http://127.0.0.1:4010/pets
   >   - `name` ：店舗名(必須、20 文字以内、例：Kojima)
 - Model の生成
   - 左の`Models`を右クリック -> `New Model` -> `Store`と入力
-  - 以下のように入力<br>
-    - Store のデータモデルの定義(必須にチェック)
+  - 以下のように入力
+    - Store のデータモデルの定義(必須にチェック)<br>
       <img src="/images/store1.png" width="50%"><br>
-    - name の properties
+    - name の properties<br>
       <img src="/images/store2.png" width="50%"><br>
-    - Store のデータモデルの例(モック打鍵時にこの例が表示されます)
+    - Store のデータモデルの例(モック打鍵時にこの例が表示されます)<br>
       <img src="/images/store3.png" width="50%"><br>
 - 同じく`Models`を右クリック -> `New Model` -> `Stores`と入力
   - `object`をクリックし以下のように入力<br>
@@ -87,7 +87,7 @@ curl http://127.0.0.1:4010/pets
   - 左の`Paths`を右クリック -> `New Path` -> `/stores`と入力
   - アクセス時のレスポンス内容を以下のように入力<br>
     <img src="/images/stores3.png" width="50%"><br>
-    <img src="/images/stores4.png" width="50%">
+    <img src="/images/stores4.png" width="50%"><br>
 
 ### 3-3-2. StoplightStudio で API 起動
 
