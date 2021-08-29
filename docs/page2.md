@@ -5,9 +5,8 @@
 - 基礎編でも触れましたが、OpenAPISpec の方がバージョンが新しいのでこの後は OpenAPISpec に寄せて説明します
 - [SwaggerEditor](https://editor.swagger.io/) にアクセス
 - 左側は YAML のエディタ、右側は SwaggerUI によって生成されるドキュメント
-- Slack で配布した`petsore.yaml`の中身をコピーし、SwaggerEditor の貼り付けると、SwaggerUI が生成される
-  <img src="/images/se.png" width="50%">
-
+- Slack で配布した`petsore.yaml`の中身をコピーし、SwaggerEditor の貼り付けると、SwaggerUI が生成される<br>
+  <img src="/images/se.png" width="80%">
 - 適当なところを編集してみましょう。11 行目を編集します
 
 ```yaml
@@ -17,7 +16,6 @@ servers:
 
 - 右側の SwaggerUI の Servers も v2 に変更されました
 - このように YAML を編集することでリアルタイムに設計書を反映させることができます
-
 - OpenAPISpec は以下要素で構成されます
   |要素|必須|概要|
   |----|----|----|
@@ -28,7 +26,6 @@ servers:
   |components |-|YAML 内の子要素を定義|
   |security |-|API の認証方法を定義|
   |tags |-|SwaggerUI 用のタグ情報を定義|
-
 - SwaggerUI の画面を確認してみましょう
 - GET /pets のタブを開く
 - Parameters で何をパラメータに指定すべきか、Responses でどんなコマンドでリクエストを送れるか、どんなレスポンスが帰ってくるかが記載されています
@@ -40,18 +37,21 @@ servers:
 
 - OpenAPISpec で仕様を示した YAML がかけました
 - この YAML を元にコードを生成してみましょう
-- SwaggerCodegen であれば SwaggerEditor の上部`Generate Server`からコード生成できますが、Java の対応バージョンが`1.7`だったり最新の OpenAPISpec に対応していなかったりイマイチです
-- なので後継である OpenAPIGenerator を使います.まずはダウンロードします
+- SwaggerCodegen であれば SwaggerEditor の上部 `Generate Server` からコード生成できますが Java の対応バージョンが`1.7`だったり最新の OpenAPISpec に対応していなかったりイマイチです
+- 今回は後継の OpenAPIGenerator を使います。まずはダウンロードしましょう
 
 ```sh
 #for Linux,Mac
 wget https://repo1.maven.org/maven2/org/openapitools/openapi-generator-cli/5.2.1/openapi-generator-cli-5.2.1.jar
 ```
 
-- wget コマンドが入ってない場合は以下にアクセスしましょう
-  [https://repo1.maven.org/maven2/org/openapitools/openapi-generator-cli/5.2.1/openapi-generator-cli-5.2.1.jar](https://repo1.maven.org/maven2/org/openapitools/openapi-generator-cli/5.2.1/openapi-generator-cli-5.2.1.jar)
+::: tip
 
-* 動作確認
+- wget コマンドが入ってない場合は以下にアクセスして直接 Jar をダウンロードする
+  [https://repo1.maven.org/maven2/org/openapitools/openapi-generator-cli/5.2.1/openapi-generator-cli-5.2.1.jar](https://repo1.maven.org/maven2/org/openapitools/openapi-generator-cli/5.2.1/openapi-generator-cli-5.2.1.jar)
+  :::
+
+- 動作確認
 
 ```sh
 java -jar openapi-generator-cli-5.2.1.jar list
@@ -75,16 +75,28 @@ java -jar openapi-generator-cli-5.2.1.jar generate -i petstore_0821.yaml -g spri
 ```
 
 - 好きな IDE で生成したコードを開いてみましょう
-- `src`配下にソースコードがモリモリ生成されています
-  <img src="/images/code.png" width="50%">
+- `src`配下にソースコードがモリモリ生成されています<br>
+  <img src="/images/code.png" width="70%">
 - ではこの API を起動してみましょう
-- `OpenAPI2SpringBoot.java`を右クリックし起動
-  <img src="/images/run.png" width="50%">
+- `OpenAPI2SpringBoot.java`を右クリックし起動<br>
+  <img src="/images/run.png" width="70%">
 - 最後が以下になれば OK です
 
 ```
 [main] org.openapitools.OpenAPI2SpringBoot      : Started OpenAPI2SpringBoot in xxxx seconds (JVM running for 6.08)
 ```
+
+::: tip
+
+- IDE がない人は以下実行して直接 Maven ビルド -> 起動します
+
+```sh
+mvn install
+cd target/
+java -jar openapi-spring-1.0.0.jar
+```
+
+:::
 
 - 以下にアクセスすると、SwagerUI のページにリダイレクトします
   [http://localhost:8080/](http://localhost:8080/)
