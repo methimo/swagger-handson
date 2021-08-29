@@ -103,7 +103,7 @@ java -jar openapi-spring-1.0.0.jar
 - また API のエンドポイントにアクセスすると、実行した時のサンプルレスポンスを返します
   [http://localhost:8080/v1/pets/1](http://localhost:8080/v1/pets/1)
 
-::: warn
+::: warning
 
 - OpenAPIGenerator によって生成されたコードは本番向けのソースには向かない
 - API の基本的な振る舞い以外のコードが多く複雑な作りになっていたり、コードチェックなどを取り込んで生成することができない

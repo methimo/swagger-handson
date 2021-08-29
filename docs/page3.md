@@ -12,12 +12,14 @@
 [https://stoplight.io/studio/](https://stoplight.io/studio/)
 
 - 右上の`GetStarted for FREE`から登録
-- 登録するとメールアドレス宛にワークスペースの URL が送られてきます
+- 登録するとメールアドレス宛にワークスペースの URL が送られてきます<br>
+  <img src="/images/stop1.png" width="80%">
 - ワークスペースにログインしたら`Add Projects`でプロジェクト作成
 - 名前はなんでも大丈夫です
 - 作成したら左の`APIs -> Import files`から配布した YAML を取り込む
 - その後`petstore_0821.yaml`をクリックすると編集モードに入ります
-- 左に OpenAPISpec の大項目、右に編集画面、という形で仕様を編集できるうようになりました
+- 左に OpenAPISpec の大項目、右に編集画面、という形で仕様を編集できるうようになりまし<br>
+  <img src="/images/stop2.png" width="80%">
 - ちなみにですが上部の　`Form <-> Code`で GUI で編集するか YAML を直接書くかを選択できます。もちろん GUI で変更した内容は YAML に即座に反映されます
 
 ### 3-2-1. StoplightStudio を活用した API 設計
@@ -59,7 +61,7 @@
 ## 3-3. Prism
 
 - モックサーバを起動する際、YAML から OpenAPIGenerator でコードを生成し、ローカルで起動する必要がありました
-- Prism 使うとコード清正を経由せず、直接モックサーバを起動できます
+- Prism 使うとコード生成を経由せず、直接モックサーバを起動できます
 -
 
 ## まとめ
