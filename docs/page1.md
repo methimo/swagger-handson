@@ -43,7 +43,7 @@
     - 実現したい内容を元に OpenAPISpec の仕様に落とし込む(SwaggerEditor を使用して YAML を書く)
     - YAML を元に設計書やダミーサーバを作成(SwaggerUI,SwaggerCodegen)
     - 作成した YAML を関係者に送ったり、Public に公開する(SwaggerHub)<br>
-      <img src="/images/swatool1.png" width="80%">
+      <img src="/images/swatool1.png" width="100%">
 
 #### 1. SwaggerSpec
 
@@ -69,4 +69,4 @@
 #### 5. 各ツールの関連性
 
 - 各ツールの関連性は以下のようなイメージ<br>
-  <img src="/images/swatool.png" width="80%">
+  <img src="/images/swatool.png" width="100%">
