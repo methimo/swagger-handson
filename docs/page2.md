@@ -54,10 +54,11 @@ wget https://repo1.maven.org/maven2/org/openapitools/openapi-generator-cli/5.2.1
 - 動作確認
 
 ```sh
+cd `ダウンロードしたフォルダ`
 java -jar openapi-generator-cli-5.2.1.jar list
 ```
 
-- Generator が対応している言語の一覧です.この Gemnerator は APIServer のコードはもちろん、仕様の API を呼び出すクライアントも生成することができます
+- Generator が対応している言語の一覧です.この Generator は APIServer のコードはもちろん、仕様の API を呼び出すクライアントも生成することができます
 - Generator を実行してコード生成しましょう！今回は APIServer を`spring(Java)`で生成、出力先フォルダを`swagger-handson`にします
 
 ```sh
@@ -94,6 +95,7 @@ java -jar openapi-generator-cli-5.2.1.jar generate -i petstore_0830.yaml -g spri
   - (Mac)[https://qiita.com/saitoryc/items/737ee9e711f1ebe0dcfa](https://qiita.com/saitoryc/items/737ee9e711f1ebe0dcfa)
 
 ```sh
+cd swagger-handson
 mvn install
 cd target/
 java -jar openapi-spring-1.0.0.jar
