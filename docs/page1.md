@@ -54,6 +54,7 @@
 
 - SwaggerSpec に準拠した yaml を編集することのできる Web エディタ
 - SwaggerUI,Codegen との連携が可能
+- Docker イメージでも提供されているので、Private な環境ではサーバ上に Docker 起動して Editor 起動も可能
 
 #### 3. SwaggerUI
 
