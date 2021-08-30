@@ -26,10 +26,10 @@
 
 ## 1-2. OpenAPISpec(Swagger) ってなに
 
-- API のインターフェース仕様を記述するための標準フォーマット
+- API のインターフェース仕様を記述するための独自言語
   - 昔は SwaggerSpec と呼ばれ SmartBear 社が開発していたが、色々喧嘩別れして別プロジェクトとして OpenAPISpec が誕生、その後 OpenAPI の標準化を推進する団体に移管
-  - 昨今では OpenAPISpec:API の仕様の標準フォーマット、OpenAPISpec を元にした実装やツール達をまとめて一般的に Swagger と呼んでいる
-  - 紛らわしいので、「Swagger ＝バージョンの古い記法だけど、ツールが揃っている」「OpenAPISpec ＝バージョンの新しい記法だけど、ツールは Swagger~~のものを使える」とざっくり覚えてください
+  - 昨今では OpenAPISpec:API のインターフェース仕様を記載するための言語、OpenAPISpec を元にした実装やツール達をまとめて一般的に Swagger と呼んでいる
+  - 「Swagger ＝バージョンの古い記法だけど、ツールが揃っている」「OpenAPISpec ＝バージョンの新しい記法だけど、ツールは Swagger~~のものを使える」とざっくり覚えてください
   - SwaggerSpec を中心として、様々な開発補助ツールが展開されている
     |用語(Swagger)|用語(OpenAPISpec)|概要|
     |----|----|----|
