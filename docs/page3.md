@@ -36,7 +36,7 @@ curl http://127.0.0.1:4010/pets
 > [{"id":1234,"name":"Pochi","tag":"dog","breed":"Poodle"},{"id":2345,"name":"Tama","tag":"cat","breed":"American Short Hair"}]
 -------------------------------------------
 
-# レスポンスを動的に変更する
+# レスポンスを動的に変更することも可能。一度モックを停止して以下実行
 prism mock -d petstore_0830.yaml
 curl http://127.0.0.1:4010/pets
 
