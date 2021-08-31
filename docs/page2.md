@@ -109,7 +109,7 @@ java -jar openapi-spring-1.0.0.jar
   [http://localhost:8080/v1/pets/1](http://localhost:8080/v1/pets/1)
   - OpenAPIGenerator で生成したコードは一律 HTTP ステータスコードを 501(NOT_IMPLEMENTED) に返すようになっています
 
-```java{16}
+```java{20}
   - PetsApi.java
     /**
      * GET /pets : List all pets
@@ -124,6 +124,7 @@ java -jar openapi-spring-1.0.0.jar
         value = "/pets",
         produces = { "application/json" }
     )
+      default ResponseEntity<List<Pet>> listPets(@ApiParam(value = "How many items to return at one time (max 100)") @Valid @RequestParam(value = "limit", required = false) Integer limit) {
  ~~~中略~~~
         return new ResponseEntity<>(HttpStatus.NOT_IMPLEMENTED);
     }
