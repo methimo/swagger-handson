@@ -110,6 +110,7 @@ java -jar openapi-spring-1.0.0.jar
   - OpenAPIGenerator で生成したコードは一律 HTTP ステータスコードを 501 に返すようになっています
 
 ```java{16}
+  - PetsApi.java
     /**
      * GET /pets : List all pets
      * Desctibe Pets
