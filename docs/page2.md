@@ -107,6 +107,30 @@ java -jar openapi-spring-1.0.0.jar
   [http://localhost:8080/](http://localhost:8080/)
 - また API のエンドポイントにアクセスすると、実行した時のサンプルレスポンスを返します
   [http://localhost:8080/v1/pets/1](http://localhost:8080/v1/pets/1)
+  - OpenAPIGenerator で生成したコードは一律 HTTP ステータスコードを 501 に返すようになっています
+
+```java{21}
+    /**
+     * GET /pets : List all pets
+     * Desctibe Pets
+     *
+     * @param limit How many items to return at one time (max 100) (optional)
+     * @return A paged array of pets (status code 200)
+     *         or unexpected error (status code 200)
+     */
+    @ApiOperation(value = "List all pets", nickname = "listPets", notes = "Desctibe Pets", response = Pet.class, responseContainer = "List", tags={ "pets", })
+    @RequestMapping(
+        method = RequestMethod.GET,
+        value = "/pets",
+        produces = { "application/json" }
+    )
+    default ResponseEntity<List<Pet>> listPets(@ApiParam(value = "How many items to return at one time (max 100)") @Valid @RequestParam(value = "limit", required = false) Integer limit) {
+        getRequest().ifPresent(request -> {
+ ~~~中略~~~
+ });
+        return new ResponseEntity<>(HttpStatus.NOT_IMPLEMENTED);
+    }
+```
 
 ::: warning
 
