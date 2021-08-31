@@ -1,6 +1,8 @@
 # 3. 実践編
 
 - OpenAPISpec の記載に役立つツール群を紹介します
+- 1-2.で紹介した本家 Swagger ファミリーのツール以外にもサードパーティのツールが数多く存在します
+- [https://openapi.tools/](https://openapi.tools/)
 
 ## (SKIP)3-1. VSCode の Swagger プラグイン
 
@@ -44,7 +46,8 @@ curl http://127.0.0.1:4010/pets
 
 ## 3-3. StoplightStudio
 
-- GUI で API 仕様を書ける＋ Prism によるモックサーバ生成機能を持つ Web エディタ
+- 3-2.の Prism 開発元でもある Stoplight 社が提供する WEB エディタ
+- GUI で API 仕様を書ける＋ Prism によるモックサーバ生成機能を持つ
 - OpenAPISpec は YAML を記載する必要があるので、OpenAPISpec の記法と YAML の項目の対応付けを学ぶ必要がある。でも YAML をゴリゴリ書くことは避けたい…
 - StoplightStudio を使うことで OpenAPISpec の記法を意識せずスラスラ API 仕様を記載できる
 

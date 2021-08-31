@@ -107,9 +107,10 @@ java -jar openapi-spring-1.0.0.jar
   [http://localhost:8080/](http://localhost:8080/)
 - また API のエンドポイントにアクセスすると、実行した時のサンプルレスポンスを返します
   [http://localhost:8080/v1/pets/1](http://localhost:8080/v1/pets/1)
+  - `Try it out!`を実行するとステータスコード 501 でレスポンスが返ってきます
   - OpenAPIGenerator で生成したコードは一律 HTTP ステータスコードを 501(NOT_IMPLEMENTED) に返すようになっています
 
-```java{20}
+```java{17}
   - PetsApi.java
     /**
      * GET /pets : List all pets
